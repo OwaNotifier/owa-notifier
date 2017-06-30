@@ -3,9 +3,13 @@ package info.kapable.utils.owanotifier;
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -16,6 +20,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import info.kapable.utils.owanotifier.service.Folder;
 
@@ -85,6 +90,33 @@ public class DesktopProxy implements Observer {
 		SystemTray tray = SystemTray.getSystemTray();
 
 		try {
+	        final PopupMenu popup = new PopupMenu();
+	        
+	        // Create a pop-up menu components
+	        MenuItem aboutItem = new MenuItem("About");
+	        aboutItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+			        JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ", JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+	        	
+	        });
+	        MenuItem exitItem = new MenuItem("Exit");
+	        exitItem.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					OwaNotifier.log("Exit Perform");
+					OwaNotifier.exit(0);
+				}
+	        });
+	       
+	        //Add components to pop-up menu
+	        popup.add(aboutItem);
+	        popup.addSeparator();
+	        popup.add(exitItem);
+	        
 			// If the icon is a file
 			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
 
@@ -98,7 +130,7 @@ public class DesktopProxy implements Observer {
 			trayIcon.setToolTip("Notification de nouveaux courriel(s)");
 			trayIcon.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 1) {
+					if (e.getClickCount() == 2) {
 						Desktop dt = Desktop.getDesktop();
 						URL f;
 						try {
@@ -114,6 +146,7 @@ public class DesktopProxy implements Observer {
 					}
 				}
 			});
+	        trayIcon.setPopupMenu(popup);
 			tray.add(trayIcon);
 		} catch (AWTException e1) {
 			// TODO Auto-generated catch block

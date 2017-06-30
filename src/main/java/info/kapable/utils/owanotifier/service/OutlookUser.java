@@ -1,9 +1,6 @@
 package info.kapable.utils.owanotifier.service;
 
-import retrofit.mime.TypedInput;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutlookUser {

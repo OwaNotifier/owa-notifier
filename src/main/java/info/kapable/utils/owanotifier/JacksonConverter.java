@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.util.Converter;
 
 import retrofit.mime.TypedInput;
 
+@SuppressWarnings("rawtypes")
 public class JacksonConverter implements Converter {
     private final ObjectMapper objectMapper;
 
