@@ -1,16 +1,11 @@
 package info.kapable.utils.owanotifier;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 
 import info.kapable.utils.owanotifier.auth.AuthHelper;
 import info.kapable.utils.owanotifier.auth.IdToken;
@@ -21,19 +16,12 @@ public class ClientHandler extends Thread {
 	private String code;
 	private String expectedNonce;
 	private String idToken;
-	private ObservableImpl obs;
-	private OwaNotifier on;
+	public TokenResponse tokenResponse = null;
 	
-	public void subscribe(Observer o) {
-		 obs  = new ObservableImpl();
-		 obs.addObserver(o);
-	}
 	// Start the thread in the constructor
-	public ClientHandler(Socket s, String nonce, OwaNotifier on) {
+	public ClientHandler(Socket s, String nonce) {
 		socket = s;
 		expectedNonce = nonce;
-		this.on = on;
-		this.subscribe(on);
 		start();
 	}
 
@@ -82,19 +70,15 @@ public class ClientHandler extends Thread {
 		    out.write("HTTP/1.1 200 OK\r\n");
 		    out.write("Content-Type: text/html\r\n");
 		    out.write("\r\n");
-		    out.write("<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fenêtre</a></body><html>");
-		 // do not in.close();
+		    out.write("<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fenêtre</a></body></html>");
+		    // do not in.close();
 		    out.flush();
 		    out.close();
-	        System.out.println("OK");
 	        IdToken idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
 	        if (idTokenObj != null) {
-	          OwaNotifier.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
-	          obs.update();
-	          obs.notifyObservers();
+	          this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
 	        }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
