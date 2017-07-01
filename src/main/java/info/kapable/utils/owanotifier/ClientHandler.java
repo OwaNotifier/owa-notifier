@@ -17,7 +17,7 @@ public class ClientHandler extends Thread {
 	private String expectedNonce;
 	private String idToken;
 	public TokenResponse tokenResponse = null;
-	
+
 	// Start the thread in the constructor
 	public ClientHandler(Socket s, String nonce) {
 		socket = s;
@@ -32,52 +32,51 @@ public class ClientHandler extends Thread {
 			BufferedReader in;
 			BufferedWriter out;
 			int contentLength = 0;
-            final String contentHeader = "Content-Length: ";
-            
-			in = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
+			final String contentHeader = "Content-Length: ";
 
-			out = new BufferedWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
-			for (String line = in.readLine(); line != null; line = in
-					.readLine()) {
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			for (String line = in.readLine(); line != null; line = in.readLine()) {
 				// System.out.println(line);
 				if (line.startsWith(contentHeader)) {
-					 contentLength = Integer.parseInt(line.substring(contentHeader.length()));
-					 break;
-	            }
+					contentLength = Integer.parseInt(line.substring(contentHeader.length()));
+					break;
+				}
 			}
 
-		    StringBuilder dataBuilder = new StringBuilder();
-		    int c = 0;
-		    for (int i = 0; i < contentLength; i++) {
-		    	c = in.read();
-		    	dataBuilder.append((char) c);
-		    }
-		    System.out.println(dataBuilder.toString());
-		    String[] data = dataBuilder.toString().split("&");
-		    for(int i = 0; i < data.length; i++) {
-		    	String[] array = data[i].split("=");
-		    	System.out.println(array[0] + " = " + array[1]);
-		    	if(array[0].contains("code")) {
-		    		this.code = array[1];
-		    	}
-		    	if(array[0].contains("id_token")) {
-		    		this.idToken = array[1];
-		    	}
-		    }
-	        
-		    out.write("HTTP/1.1 200 OK\r\n");
-		    out.write("Content-Type: text/html\r\n");
-		    out.write("\r\n");
-		    out.write("<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fenêtre</a></body></html>");
-		    // do not in.close();
-		    out.flush();
-		    out.close();
-	        IdToken idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
-	        if (idTokenObj != null) {
-	          this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
-	        }
+			StringBuilder dataBuilder = new StringBuilder();
+			int c = 0;
+			for (int i = 0; i < contentLength; i++) {
+				c = in.read();
+				dataBuilder.append((char) c);
+			}
+			if (contentLength <= 0) {
+				System.out.println(dataBuilder.toString());
+				String[] data = dataBuilder.toString().split("&");
+				for (int i = 0; i < data.length; i++) {
+					String[] array = data[i].split("=");
+					System.out.println(array[0] + " = " + array[1]);
+					if (array[0].contains("code")) {
+						this.code = array[1];
+					}
+					if (array[0].contains("id_token")) {
+						this.idToken = array[1];
+					}
+				}
+			}
+			out.write("HTTP/1.1 200 OK\r\n");
+			out.write("Content-Type: text/html\r\n");
+			out.write("\r\n");
+			out.write(
+					"<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fenêtre</a></body></html>");
+			// do not in.close();
+			out.flush();
+			out.close();
+			IdToken idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
+			if (idTokenObj != null) {
+				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
