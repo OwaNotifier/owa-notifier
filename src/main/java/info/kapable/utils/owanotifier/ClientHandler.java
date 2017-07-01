@@ -51,7 +51,7 @@ public class ClientHandler extends Thread {
 				c = in.read();
 				dataBuilder.append((char) c);
 			}
-			if (contentLength <= 0) {
+			if (contentLength >= 0) {
 				System.out.println(dataBuilder.toString());
 				String[] data = dataBuilder.toString().split("&");
 				for (int i = 0; i < data.length; i++) {
