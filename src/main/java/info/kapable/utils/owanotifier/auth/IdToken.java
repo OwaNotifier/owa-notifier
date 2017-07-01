@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.kapable.utils.owanotifier.OwaNotifier;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IdToken {
   // NOTE: This is just a subset of the claims returned in the
@@ -42,7 +44,7 @@ public class IdToken {
     IdToken newToken = null;
     try {
       newToken = mapper.readValue(decodedBytes, IdToken.class);
-      if (!newToken.isValid(nonce)) {
+      if (!newToken.isValid(nonce) && !OwaNotifier.testMode) {
         return null;
       }
     } catch (Exception e) {

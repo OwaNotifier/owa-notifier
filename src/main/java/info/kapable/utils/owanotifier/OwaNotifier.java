@@ -20,6 +20,7 @@ import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
 import info.kapable.utils.owanotifier.service.OutlookUser;
 
 public class OwaNotifier extends Observable {
+	public static boolean testMode = false;
 	public TokenResponse tokenResponse;
 	public DesktopProxy desktop;
 	private String email;

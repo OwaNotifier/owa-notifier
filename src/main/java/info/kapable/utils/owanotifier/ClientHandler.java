@@ -17,6 +17,7 @@ public class ClientHandler extends Thread {
 	private String expectedNonce;
 	private String idToken;
 	public TokenResponse tokenResponse = null;
+	public IdToken idTokenObj;
 
 	// Start the thread in the constructor
 	public ClientHandler(Socket s, String nonce) {
@@ -38,7 +39,7 @@ public class ClientHandler extends Thread {
 
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			for (String line = in.readLine(); line != null; line = in.readLine()) {
-				// System.out.println(line);
+				OwaNotifier.log(line);
 				if (line.startsWith(contentHeader)) {
 					contentLength = Integer.parseInt(line.substring(contentHeader.length()));
 					break;
@@ -52,7 +53,7 @@ public class ClientHandler extends Thread {
 				dataBuilder.append((char) c);
 			}
 			if (contentLength >= 0) {
-				System.out.println(dataBuilder.toString());
+				OwaNotifier.log(dataBuilder.toString());
 				String[] data = dataBuilder.toString().split("&");
 				for (int i = 0; i < data.length; i++) {
 					String[] array = data[i].split("=");
@@ -73,7 +74,7 @@ public class ClientHandler extends Thread {
 			// do not in.close();
 			out.flush();
 			out.close();
-			IdToken idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
+			this.idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
 			if (idTokenObj != null) {
 				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
 			}
