@@ -1,4 +1,6 @@
-  # Owa-Notifier
+# Owa-Notifier
+[![Build Status](https://travis-ci.org/matgou/owa-notifier.svg?branch=master)](https://travis-ci.org/matgou/owa-notifier)                               
+[![codecov.io](https://codecov.io/github/matgou/owa-notifier/coverage.svg?branch=master)](https://codecov.io/github/matgou/owa-notifier?branch=master)  
 
 This application throw notification when number of unread mail change in a Office365 inbox.
 
