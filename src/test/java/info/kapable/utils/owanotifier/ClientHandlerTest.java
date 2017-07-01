@@ -62,11 +62,17 @@ public class ClientHandlerTest {
 			Socket s = serverSocket.accept();
 			UUID nonce = UUID.randomUUID();
 			ClientHandler c = new ClientHandler(s, nonce.toString());
-			serverSocket.close();
+			try {
+				c.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			// Token is null because expiration time
 			assertTrue(c.tokenResponse == null);
 			// idToken is not null
 			assertTrue(c.idTokenObj != null);
+			s.close();
+			serverSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
