@@ -1,11 +1,14 @@
 package info.kapable.utils.owanotifier;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.Observable;
+import java.util.Properties;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -21,9 +24,26 @@ import info.kapable.utils.owanotifier.service.OutlookUser;
 
 public class OwaNotifier extends Observable {
 	public static boolean testMode = false;
+	public static Properties props;
 	public TokenResponse tokenResponse;
 	public DesktopProxy desktop;
 	private String email;
+	
+	/**
+	 * Load config from properties in ressource
+	 * @throws IOException
+	 */
+	private static void loadConfig() throws IOException {
+		String authConfigFile = "auth.properties";
+		InputStream authConfigStream = AuthHelper.class.getClassLoader().getResourceAsStream(authConfigFile);
+
+		if (authConfigStream != null) {
+			props = new Properties();
+			props.load(authConfigStream);
+		} else {
+			throw new FileNotFoundException("Property file '" + authConfigFile + "' not found in the classpath.");
+		}
+	}
 	
 	/**
 	 * Main function swith from static domain to object
@@ -33,6 +53,7 @@ public class OwaNotifier extends Observable {
 	 */
 	public static void main(String[] args) throws IOException, URISyntaxException {
 		OwaNotifier on = new OwaNotifier();
+		loadConfig();
 		on.boot();
 	}
 	
@@ -80,7 +101,8 @@ public class OwaNotifier extends Observable {
 		
 		// Start a webserver to handle return of authenficatoion
 		try {
-			ServerSocket serverSocket = new ServerSocket(8080); // Start, listen on port 8080
+			int listenPort = Integer.parseInt(OwaNotifier.props.getProperty("listenPort", "8080"));
+			ServerSocket serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
 			Socket s = serverSocket.accept(); // Wait for a client to connect
 			ClientHandler c = new ClientHandler(s, nonce.toString()); // Handle the client in a separate thread
 			c.join();

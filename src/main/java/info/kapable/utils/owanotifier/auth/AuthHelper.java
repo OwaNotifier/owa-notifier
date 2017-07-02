@@ -3,13 +3,19 @@ package info.kapable.utils.owanotifier.auth;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Properties;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.okhttp.OkHttpClient;
 
 import info.kapable.utils.owanotifier.JacksonConverter;
+import info.kapable.utils.owanotifier.OwaNotifier;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
+import retrofit.client.OkClient;
 
 public class AuthHelper {
 	private static final String authority = "https://login.microsoftonline.com";
@@ -24,7 +30,7 @@ public class AuthHelper {
 	private static String getAppId() {
 		if (appId == null) {
 			try {
-				loadConfig();
+				appId = OwaNotifier.props.getProperty("appId");
 			} catch (Exception e) {
 				return null;
 			}
@@ -35,7 +41,7 @@ public class AuthHelper {
 	private static String getAppPassword() {
 		if (appPassword == null) {
 			try {
-				loadConfig();
+				appPassword =  OwaNotifier.props.getProperty("appPassword");
 			} catch (Exception e) {
 				return null;
 			}
@@ -46,7 +52,7 @@ public class AuthHelper {
 	private static String getRedirectUrl() {
 		if (redirectUrl == null) {
 			try {
-				loadConfig();
+				redirectUrl = OwaNotifier.props.getProperty("redirectUrl");
 			} catch (Exception e) {
 				return null;
 			}
@@ -60,25 +66,6 @@ public class AuthHelper {
 			sb.append(scope + " ");
 		}
 		return sb.toString().trim();
-	}
-
-	private static void loadConfig() throws IOException {
-		String authConfigFile = "auth.properties";
-		InputStream authConfigStream = AuthHelper.class.getClassLoader().getResourceAsStream(authConfigFile);
-
-		if (authConfigStream != null) {
-			Properties authProps = new Properties();
-			try {
-				authProps.load(authConfigStream);
-				appId = authProps.getProperty("appId");
-				appPassword = authProps.getProperty("appPassword");
-				redirectUrl = authProps.getProperty("redirectUrl");
-			} finally {
-				authConfigStream.close();
-			}
-		} else {
-			throw new FileNotFoundException("Property file '" + authConfigFile + "' not found in the classpath.");
-		}
 	}
 
 	public static String getLoginUrl(UUID state, UUID nonce) {
@@ -97,14 +84,15 @@ public class AuthHelper {
 
 	public static TokenResponse getTokenFromAuthCode(String authCode, String tenantId) {
 		// Create a logging interceptor to log request and responses
-		/*
-		 * Client client = new OkHttpClient.Builder() .proxy(new
-		 * Proxy(Proxy.Type.HTTP, new InetSocketAddress("100.54.33.159", 3129)))
-		 * .build();
-		 */
+		OkHttpClient client = new OkHttpClient();
+		String proxy = OwaNotifier.props.getProperty("proxyHost");
+		int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
+		if(proxy != null && proxyPort != 0) {
+			client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+		}
 
 		// Create and configure the Retrofit object
-		RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(authority).build();
+		RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(authority).setClient(new OkClient(client)).build();
 
 		// Generate the token service
 		TokenService tokenService = retrofit.create(TokenService.class);

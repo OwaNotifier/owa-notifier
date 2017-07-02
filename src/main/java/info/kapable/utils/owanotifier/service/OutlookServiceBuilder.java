@@ -1,10 +1,16 @@
 package info.kapable.utils.owanotifier.service;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.UUID;
 
+import com.squareup.okhttp.OkHttpClient;
+
+import info.kapable.utils.owanotifier.OwaNotifier;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.LogLevel;
+import retrofit.client.OkClient;
 
 public class OutlookServiceBuilder {
 
@@ -27,6 +33,13 @@ public class OutlookServiceBuilder {
 				}
 			}
 		};
+		
+		OkHttpClient client = new OkHttpClient();
+		String proxy = OwaNotifier.props.getProperty("proxyHost");
+		int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
+		if(proxy != null && proxyPort != 0) {
+			client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+		}
 
 		// Create and configure the Retrofit object
 		RestAdapter restAdapter = new RestAdapter.Builder()
@@ -41,7 +54,7 @@ public class OutlookServiceBuilder {
 					public void log(String msg) {
 						System.out.println(msg);
 					}
-				}).build();
+				}).setClient(new OkClient(client)).build();
 
 		// Generate the token service
 		return restAdapter.create(OutlookService.class);
