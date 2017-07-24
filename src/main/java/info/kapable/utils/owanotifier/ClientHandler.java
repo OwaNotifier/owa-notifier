@@ -70,7 +70,7 @@ public class ClientHandler extends Thread {
 			out.write("Content-Type: text/html\r\n");
 			out.write("\r\n");
 			out.write(
-					"<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fenêtre</a></body></html>");
+					"<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fen&ecirc;tre</a></body></html>");
 			// do not in.close();
 			out.flush();
 			out.close();

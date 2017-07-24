@@ -86,9 +86,11 @@ public class AuthHelper {
 		// Create a logging interceptor to log request and responses
 		OkHttpClient client = new OkHttpClient();
 		String proxy = OwaNotifier.props.getProperty("proxyHost");
-		int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
-		if(proxy != null && proxyPort != 0) {
-			client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+		if(proxy != null && !proxy.contentEquals("")) {
+			int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
+			if(proxyPort != 0) {
+				client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+			}
 		}
 
 		// Create and configure the Retrofit object

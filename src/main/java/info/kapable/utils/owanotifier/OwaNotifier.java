@@ -131,7 +131,7 @@ public class OwaNotifier extends Observable {
 		
 		while (true) {
 			Thread.sleep(5000);
-		
+			
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
 			if (inbox.getUnreadItemCount() > 0 && lastUnreadCount != inbox.getUnreadItemCount()) {

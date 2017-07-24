@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -80,6 +82,35 @@ public class DesktopProxy implements Observer {
 	 */
 	public void displayTray(String message) throws AWTException, java.net.MalformedURLException {
 		trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
+		try {
+			this.notify("Nouveaux messages", message);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Send notification to desktop
+	 * @param title
+	 * @param message
+	 * @throws Exception
+	 */
+	public void notify(String title, String message) throws Exception {
+		List<String> command = new ArrayList<String>();
+		command.add("notify-send");
+
+		command.add("-i");
+		// https://github.com/wokier/java-to-OS-notify/issues/2
+		// command.add("gtk-dialog-" + messageType.name().toLowerCase());
+		command.add("dialog-info");
+		command.add(title);
+		command.add(message);
+		try {
+			Runtime.getRuntime().exec(command.toArray(new String[command.size()]));
+		} catch (IOException e) {
+			throw new Exception("Unable to notify with Notify OSD", e);
+		}
 	}
 
 	/**
@@ -90,33 +121,34 @@ public class DesktopProxy implements Observer {
 		SystemTray tray = SystemTray.getSystemTray();
 
 		try {
-	        final PopupMenu popup = new PopupMenu();
-	        
-	        // Create a pop-up menu components
-	        MenuItem aboutItem = new MenuItem("About");
-	        aboutItem.addActionListener(new ActionListener() {
+			final PopupMenu popup = new PopupMenu();
+
+			// Create a pop-up menu components
+			MenuItem aboutItem = new MenuItem("About");
+			aboutItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-			        JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ", JOptionPane.INFORMATION_MESSAGE);
-					
+					JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ",
+							JOptionPane.INFORMATION_MESSAGE);
+
 				}
-	        	
-	        });
-	        MenuItem exitItem = new MenuItem("Exit");
-	        exitItem.addActionListener(new ActionListener() {
+
+			});
+			MenuItem exitItem = new MenuItem("Exit");
+			exitItem.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					OwaNotifier.log("Exit Perform");
 					OwaNotifier.exit(0);
 				}
-	        });
-	       
-	        //Add components to pop-up menu
-	        popup.add(aboutItem);
-	        popup.addSeparator();
-	        popup.add(exitItem);
-	        
+			});
+
+			// Add components to pop-up menu
+			popup.add(aboutItem);
+			popup.addSeparator();
+			popup.add(exitItem);
+
 			// If the icon is a file
 			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
 
@@ -146,7 +178,7 @@ public class DesktopProxy implements Observer {
 					}
 				}
 			});
-	        trayIcon.setPopupMenu(popup);
+			trayIcon.setPopupMenu(popup);
 			tray.add(trayIcon);
 		} catch (AWTException e1) {
 			// TODO Auto-generated catch block
