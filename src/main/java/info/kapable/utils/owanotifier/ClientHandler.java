@@ -69,8 +69,15 @@ public class ClientHandler extends Thread {
 			out.write("HTTP/1.1 200 OK\r\n");
 			out.write("Content-Type: text/html\r\n");
 			out.write("\r\n");
-			out.write(
-					"<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fen&ecirc;tre</a></body></html>");
+			String closeWindow = OwaNotifier.props.getProperty("closeWindow");
+			if(closeWindow == null) {
+				closeWindow = "false";
+			}
+			if(closeWindow.contentEquals("false")) {
+				out.write("<html><body><meta http-equiv='refresh' content='0; url=https://outlook.office.com/owa/' /></body></html>");
+			} else {
+				out.write("<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fen&ecirc;tre</a></body></html>");
+			}
 			// do not in.close();
 			out.flush();
 			out.close();
