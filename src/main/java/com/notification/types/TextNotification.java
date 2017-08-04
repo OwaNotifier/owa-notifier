@@ -1,6 +1,8 @@
 package com.notification.types;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -17,6 +19,11 @@ public class TextNotification extends BorderLayoutNotification {
 
 	private TextTheme m_textTheme;
 
+	public void addActionListener(MouseListener l) {
+		this.m_titleLabel.addMouseListener(l);
+		this.m_subtitleArea.addMouseListener(l);
+	}
+	
 	public TextNotification() {
 		m_titleLabel = new JLabel();
 		m_subtitleArea = new JTextArea();

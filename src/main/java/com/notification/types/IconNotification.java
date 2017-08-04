@@ -26,7 +26,7 @@ public class IconNotification extends TextNotification {
 		panel.add(m_titleLabel, BorderLayout.NORTH);
 		panel.add(m_subtitleArea, BorderLayout.CENTER);
 		panel.setBorder(new EmptyBorder(0, ICON_PADDING, 0, 0));
-
+		
 		this.addComponent(m_iconLabel, BorderLayout.WEST);
 		this.addComponent(panel, BorderLayout.CENTER);
 	}

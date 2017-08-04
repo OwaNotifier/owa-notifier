@@ -114,7 +114,30 @@ public class DesktopProxy implements Observer {
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 
-		IconNotification icon = factory.buildIconNotification(title, message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		final IconNotification icon = factory.buildIconNotification(title, message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		
+		icon.addActionListener(new MouseAdapter  (){
+			@Override
+		    public void mousePressed(MouseEvent e) {
+		        System.out.println(e);
+				try {
+					URL f = new URL("https://outlook.office365.com/owa/");
+					try {
+						browse(f.toURI().toString());
+						icon.removeFromManager();
+					} catch (MalformedURLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    }
+		});
 		try {
 			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
 		} catch (NumberFormatException e) {
