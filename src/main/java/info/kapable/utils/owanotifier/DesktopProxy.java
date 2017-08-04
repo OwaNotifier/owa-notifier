@@ -1,5 +1,7 @@
 package info.kapable.utils.owanotifier;
 
+import info.kapable.utils.owanotifier.service.Folder;
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -20,9 +22,16 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import info.kapable.utils.owanotifier.service.Folder;
+import com.notification.NotificationFactory;
+import com.notification.NotificationFactory.Location;
+import com.notification.manager.SimpleManager;
+import com.notification.types.IconNotification;
+import com.platform.Platform;
+import com.theme.ThemePackagePresets;
+import com.utils.Time;
 
 public class DesktopProxy implements Observer {
 
@@ -79,7 +88,17 @@ public class DesktopProxy implements Observer {
 	 * @throws java.net.MalformedURLException
 	 */
 	public void displayTray(String message) throws AWTException, java.net.MalformedURLException {
-		trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
+		if(OwaNotifier.props.getProperty("notification.type").contentEquals("system")) {
+			trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
+		} else {
+			Platform.instance().setAdjustForPlatform(true);
+			
+			SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
+			NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
+	
+			IconNotification icon = factory.buildIconNotification("Nouveaux Messages", message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.props.getProperty("notification.fade_time"))));
+		}
 	}
 
 	/**
