@@ -45,6 +45,12 @@ public class OwaNotifier extends Observable {
 		}
 	}
 	
+	public static Properties getProps() throws IOException {
+		if(OwaNotifier.props == null) {
+			loadConfig();
+		}
+		return OwaNotifier.props;
+	}
 	/**
 	 * Main function swith from static domain to object
 	 * @param args
@@ -101,7 +107,7 @@ public class OwaNotifier extends Observable {
 		
 		// Start a webserver to handle return of authenficatoion
 		try {
-			int listenPort = Integer.parseInt(OwaNotifier.props.getProperty("listenPort", "8080"));
+			int listenPort = Integer.parseInt(OwaNotifier.getProps().getProperty("listenPort", "8080"));
 			ServerSocket serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
 			Socket s = serverSocket.accept(); // Wait for a client to connect
 			ClientHandler c = new ClientHandler(s, nonce.toString()); // Handle the client in a separate thread
@@ -131,7 +137,7 @@ public class OwaNotifier extends Observable {
 		
 		while (true) {
 			Thread.sleep(5000);
-		
+			
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
 			if (inbox.getUnreadItemCount() > 0 && lastUnreadCount != inbox.getUnreadItemCount()) {

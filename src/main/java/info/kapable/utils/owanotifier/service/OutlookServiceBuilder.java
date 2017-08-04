@@ -1,5 +1,6 @@
 package info.kapable.utils.owanotifier.service;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import retrofit.client.OkClient;
 
 public class OutlookServiceBuilder {
 
-	public static OutlookService getOutlookService(String accessTokenSource, String userEmailSource) {
+	public static OutlookService getOutlookService(String accessTokenSource, String userEmailSource) throws IOException {
 		// Create a request interceptor to add headers that belong on
 		// every request
 		final String userEmail = userEmailSource;
@@ -35,10 +36,12 @@ public class OutlookServiceBuilder {
 		};
 		
 		OkHttpClient client = new OkHttpClient();
-		String proxy = OwaNotifier.props.getProperty("proxyHost");
-		int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
-		if(proxy != null && proxyPort != 0) {
-			client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+		String proxy = OwaNotifier.getProps().getProperty("proxyHost");
+		if(proxy != null && !proxy.contentEquals("")) {
+			int proxyPort = Integer.parseInt(OwaNotifier.getProps().getProperty("proxyPort", "0"));
+			if(proxyPort != 0) {
+				client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+			}
 		}
 
 		// Create and configure the Retrofit object

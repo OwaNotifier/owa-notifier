@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -88,16 +90,39 @@ public class DesktopProxy implements Observer {
 	 * @throws java.net.MalformedURLException
 	 */
 	public void displayTray(String message) throws AWTException, java.net.MalformedURLException {
-		if(OwaNotifier.props.getProperty("notification.type").contentEquals("system")) {
-			trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
-		} else {
-			Platform.instance().setAdjustForPlatform(true);
-			
-			SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
-			NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
-	
-			IconNotification icon = factory.buildIconNotification("Nouveaux Messages", message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.props.getProperty("notification.fade_time"))));
+		try {
+			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
+				trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
+			} else {
+				this.notify("Nouveaux messages", message);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Send notification to desktop
+	 * @param title
+	 * @param message
+	 * @throws Exception
+	 */
+	public void notify(String title, String message) {
+		Platform.instance().setAdjustForPlatform(true);
+
+		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
+		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
+
+		IconNotification icon = factory.buildIconNotification("Nouveaux Messages", message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		try {
+			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -109,33 +134,34 @@ public class DesktopProxy implements Observer {
 		SystemTray tray = SystemTray.getSystemTray();
 
 		try {
-	        final PopupMenu popup = new PopupMenu();
-	        
-	        // Create a pop-up menu components
-	        MenuItem aboutItem = new MenuItem("About");
-	        aboutItem.addActionListener(new ActionListener() {
+			final PopupMenu popup = new PopupMenu();
+
+			// Create a pop-up menu components
+			MenuItem aboutItem = new MenuItem("About");
+			aboutItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-			        JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ", JOptionPane.INFORMATION_MESSAGE);
-					
+					JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ",
+							JOptionPane.INFORMATION_MESSAGE);
+
 				}
-	        	
-	        });
-	        MenuItem exitItem = new MenuItem("Exit");
-	        exitItem.addActionListener(new ActionListener() {
+
+			});
+			MenuItem exitItem = new MenuItem("Exit");
+			exitItem.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					OwaNotifier.log("Exit Perform");
 					OwaNotifier.exit(0);
 				}
-	        });
-	       
-	        //Add components to pop-up menu
-	        popup.add(aboutItem);
-	        popup.addSeparator();
-	        popup.add(exitItem);
-	        
+			});
+
+			// Add components to pop-up menu
+			popup.add(aboutItem);
+			popup.addSeparator();
+			popup.add(exitItem);
+
 			// If the icon is a file
 			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
 
@@ -165,7 +191,7 @@ public class DesktopProxy implements Observer {
 					}
 				}
 			});
-	        trayIcon.setPopupMenu(popup);
+			trayIcon.setPopupMenu(popup);
 			tray.add(trayIcon);
 		} catch (AWTException e1) {
 			// TODO Auto-generated catch block

@@ -30,7 +30,7 @@ public class AuthHelper {
 	private static String getAppId() {
 		if (appId == null) {
 			try {
-				appId = OwaNotifier.props.getProperty("appId");
+				appId = OwaNotifier.getProps().getProperty("appId");
 			} catch (Exception e) {
 				return null;
 			}
@@ -41,7 +41,7 @@ public class AuthHelper {
 	private static String getAppPassword() {
 		if (appPassword == null) {
 			try {
-				appPassword =  OwaNotifier.props.getProperty("appPassword");
+				appPassword =  OwaNotifier.getProps().getProperty("appPassword");
 			} catch (Exception e) {
 				return null;
 			}
@@ -52,7 +52,7 @@ public class AuthHelper {
 	private static String getRedirectUrl() {
 		if (redirectUrl == null) {
 			try {
-				redirectUrl = OwaNotifier.props.getProperty("redirectUrl");
+				redirectUrl = OwaNotifier.getProps().getProperty("redirectUrl");
 			} catch (Exception e) {
 				return null;
 			}
@@ -85,10 +85,18 @@ public class AuthHelper {
 	public static TokenResponse getTokenFromAuthCode(String authCode, String tenantId) {
 		// Create a logging interceptor to log request and responses
 		OkHttpClient client = new OkHttpClient();
-		String proxy = OwaNotifier.props.getProperty("proxyHost");
-		int proxyPort = Integer.parseInt(OwaNotifier.props.getProperty("proxyPort", "0"));
-		if(proxy != null && proxyPort != 0) {
-			client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+		String proxy;
+		try {
+			proxy = OwaNotifier.getProps().getProperty("proxyHost");
+			if(proxy != null && !proxy.contentEquals("")) {
+				int proxyPort = Integer.parseInt(OwaNotifier.getProps().getProperty("proxyPort", "0"));
+				if(proxyPort != 0) {
+					client.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, proxyPort)));
+				}
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 		// Create and configure the Retrofit object
