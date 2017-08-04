@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.UUID;
@@ -18,6 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.kapable.utils.owanotifier.auth.AuthHelper;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.service.Folder;
+import info.kapable.utils.owanotifier.service.Message;
+import info.kapable.utils.owanotifier.service.MessageCollection;
 import info.kapable.utils.owanotifier.service.OutlookService;
 import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
 import info.kapable.utils.owanotifier.service.OutlookUser;
@@ -140,9 +143,20 @@ public class OwaNotifier extends Observable {
 			
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
-			if (inbox.getUnreadItemCount() > 0 && lastUnreadCount != inbox.getUnreadItemCount()) {
+			
+			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() > (lastUnreadCount +1)) {
 				this.setChanged();
-				this.notifyObservers(inbox);
+				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_MANY_NEW_MSG, inbox.getUnreadItemCount() + " message(s) non lu"));
+			}
+			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() == (lastUnreadCount +1)) {
+				this.setChanged();
+				MessageCollection m = (MessageCollection) c.fromBody(outlookService.getMessages(inbox.getId(), "receivedDateTime desc", "from,subject,bodyPreview", "isRead eq false", 1).getBody(), MessageCollection.class);
+				Message message = (Message) m.getValue().get(0);
+				this.notifyObservers(new InboxChangeEvent(inbox, message));
+			}
+			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() < lastUnreadCount) {
+				this.setChanged();
+				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_LESS_NEW_MSG, inbox.getUnreadItemCount() + " message(s) non lu"));
 			}
 			lastUnreadCount = inbox.getUnreadItemCount();
 		}

@@ -89,12 +89,12 @@ public class DesktopProxy implements Observer {
 	 * @throws AWTException
 	 * @throws java.net.MalformedURLException
 	 */
-	public void displayTray(String message) throws AWTException, java.net.MalformedURLException {
+	public void displayTray(String subject, String message) throws AWTException, java.net.MalformedURLException {
 		try {
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
-				trayIcon.displayMessage("Nouveaux Messages", message, MessageType.INFO);
+				trayIcon.displayMessage(subject, message, MessageType.INFO);
 			} else {
-				this.notify("Nouveaux messages", message);
+				this.notify(subject, message);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -114,7 +114,7 @@ public class DesktopProxy implements Observer {
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 
-		IconNotification icon = factory.buildIconNotification("Nouveaux Messages", message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		IconNotification icon = factory.buildIconNotification(title, message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
 		try {
 			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
 		} catch (NumberFormatException e) {
@@ -204,11 +204,12 @@ public class DesktopProxy implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Folder inbox = (Folder) arg;
-		if (SystemTray.isSupported()) {
+		InboxChangeEvent event = (InboxChangeEvent) arg;
+		Folder inbox = event.getInbox();
+		if (SystemTray.isSupported() && event.getEventType() != InboxChangeEvent.TYPE_LESS_NEW_MSG) {
 			try {
-				this.displayTray(inbox.getUnreadItemCount() + " message(s) non lu");
-				OwaNotifier.log(inbox.getUnreadItemCount() + " message(s) non lu");
+				this.displayTray(event.getEventTitle(), event.getEventText());
+				OwaNotifier.log(event.getEventText());
 			} catch (AWTException e) {
 				e.printStackTrace();
 			} catch (MalformedURLException e) {

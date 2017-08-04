@@ -2,6 +2,7 @@ package info.kapable.utils.owanotifier;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
