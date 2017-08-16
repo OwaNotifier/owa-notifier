@@ -1,10 +1,13 @@
 package com.notification.types;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import com.theme.TextTheme;
@@ -27,7 +30,23 @@ public class TextNotification extends BorderLayoutNotification {
 	public TextNotification() {
 		m_titleLabel = new JLabel();
 		m_subtitleArea = new JTextArea();
+		JButton dimissButton = new JButton();
+		dimissButton.setText("X");
+		final TextNotification me = this;
+		dimissButton.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				me.removeFromManager();
+			}
+			
+		});
+		dimissButton.setOpaque(false);
+		dimissButton.setContentAreaFilled(false);
+		dimissButton.setBorderPainted(false);
+		dimissButton.setBounds((int) (this.getWidth() - dimissButton.getPreferredSize().getWidth()), 0, (int) dimissButton.getPreferredSize().getWidth(), (int) dimissButton.getPreferredSize().getHeight());
+		m_panel.add(dimissButton);
 		this.addComponent(m_titleLabel, BorderLayout.NORTH);
 		this.addComponent(m_subtitleArea, BorderLayout.CENTER);
 	}

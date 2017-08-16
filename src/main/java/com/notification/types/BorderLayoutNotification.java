@@ -12,7 +12,7 @@ import com.theme.WindowTheme;
  * Lays out Swing Components in a BorderLayout.
  */
 public class BorderLayoutNotification extends WindowNotification {
-	private JPanel m_panel;
+	protected JPanel m_panel;
 
 	public static final int PANEL_PADDING = 10;
 
