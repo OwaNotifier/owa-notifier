@@ -49,10 +49,11 @@ public class AuthHelper {
 		return appPassword;
 	}
 
-	private static String getRedirectUrl() {
+	private static String getRedirectUrl(int listenPort) {
 		if (redirectUrl == null) {
 			try {
 				redirectUrl = OwaNotifier.getProps().getProperty("redirectUrl");
+				redirectUrl = redirectUrl.replace("8080", listenPort+"");
 			} catch (Exception e) {
 				return null;
 			}
@@ -68,11 +69,11 @@ public class AuthHelper {
 		return sb.toString().trim();
 	}
 
-	public static String getLoginUrl(UUID state, UUID nonce) {
+	public static String getLoginUrl(UUID state, UUID nonce, int listenPort) {
 
 		StringBuilder urlBuilder = new StringBuilder(authorizeUrl);
 		urlBuilder.append("?client_id=" + getAppId());
-		urlBuilder.append("&redirect_uri=" + getRedirectUrl());
+		urlBuilder.append("&redirect_uri=" + getRedirectUrl(listenPort));
 		urlBuilder.append("&response_type=" + "code%20id_token");
 		urlBuilder.append("&scope=" + getScopes().replaceAll(" ", "%20"));
 		urlBuilder.append("&state=" + state);
@@ -82,7 +83,7 @@ public class AuthHelper {
 		return urlBuilder.toString();
 	}
 
-	public static TokenResponse getTokenFromAuthCode(String authCode, String tenantId) {
+	public static TokenResponse getTokenFromAuthCode(String authCode, String tenantId, int listenPort) {
 		// Create a logging interceptor to log request and responses
 		OkHttpClient client = new OkHttpClient();
 		String proxy;
@@ -108,7 +109,7 @@ public class AuthHelper {
 		try {
 			JacksonConverter c = new JacksonConverter(new ObjectMapper());
 			return (TokenResponse) c.fromBody(tokenService.getAccessTokenFromAuthCode(tenantId, getAppId(),
-					getAppPassword(), "authorization_code", authCode, getRedirectUrl()).getBody(), TokenResponse.class);
+					getAppPassword(), "authorization_code", authCode, getRedirectUrl(listenPort)).getBody(), TokenResponse.class);
 		} catch (IOException e) {
 			TokenResponse error = new TokenResponse();
 			error.setError("IOException");

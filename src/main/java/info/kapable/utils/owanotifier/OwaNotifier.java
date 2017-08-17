@@ -3,6 +3,7 @@ package info.kapable.utils.owanotifier;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.BindException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -98,22 +99,31 @@ public class OwaNotifier extends Observable {
 		// Generate UUID for login
 		UUID state = UUID.randomUUID();
 		UUID nonce = UUID.randomUUID();
-		// Redirect user to authentification webpage
-		String loginUrl = AuthHelper.getLoginUrl(state, nonce);
-		System.out.println(" * loginUrl: " + loginUrl);
-		try {
-			this.desktop.browse(loginUrl);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(3);
-		}
 		
 		// Start a webserver to handle return of authenficatoion
 		try {
 			int listenPort = Integer.parseInt(OwaNotifier.getProps().getProperty("listenPort", "8080"));
-			ServerSocket serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
+			ServerSocket serverSocket = null;
+			while(serverSocket == null) {
+				try {
+					OwaNotifier.log("update listen port to " + listenPort);
+					serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
+				} catch (BindException e){
+					listenPort = listenPort +1;
+				}
+			}
+			
+			// Redirect user to authentification webpage
+			String loginUrl = AuthHelper.getLoginUrl(state, nonce, listenPort);
+			System.out.println(" * loginUrl: " + loginUrl);
+			try {
+				this.desktop.browse(loginUrl);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				OwaNotifier.exit(3);
+			}
 			Socket s = serverSocket.accept(); // Wait for a client to connect
-			ClientHandler c = new ClientHandler(s, nonce.toString()); // Handle the client in a separate thread
+			ClientHandler c = new ClientHandler(s, nonce.toString(), listenPort); // Handle the client in a separate thread
 			c.join();
 			s.close();
 			serverSocket.close();
