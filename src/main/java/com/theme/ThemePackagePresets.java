@@ -11,15 +11,15 @@ public class ThemePackagePresets {
 		ThemePackage pack = new ThemePackage();
 
 		WindowTheme window = new WindowTheme();
-		window.background = new Color(255, 255, 255);
+		window.background = new Color(242, 255, 230);
 		window.foreground = new Color(160, 205, 250);
 		window.opacity = 0.8f;
 		window.width = 300;
 		window.height = 100;
 
 		TextTheme text = new TextTheme();
-		text.title = new Font("Arial", Font.BOLD, 22);
-		text.subtitle = new Font("Arial", Font.PLAIN, 16);
+		text.title = new Font("Arial", Font.BOLD, 12);
+		text.subtitle = new Font("Arial", Font.PLAIN, 10);
 		text.titleColor = new Color(10, 10, 10);
 		text.subtitleColor = new Color(10, 10, 10);
 
