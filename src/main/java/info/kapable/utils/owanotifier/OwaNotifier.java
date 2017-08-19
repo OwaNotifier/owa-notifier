@@ -100,7 +100,10 @@ public class OwaNotifier extends Observable {
 	 */
 	static void setProps(String key, String value) throws IOException {
 		loadConfig();
-		OwaNotifier.props.put(key, value);
+		if(value != null)
+			OwaNotifier.props.put(key, value);
+		else
+			OwaNotifier.props.remove(key);
 	}
 
 	/**

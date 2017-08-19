@@ -50,6 +50,24 @@ public class ClientHandlerTest {
 	}
 	
 	@Test
+	public void testWithCloseWindowNull() {
+		OwaNotifier.testMode = true;
+		try {
+			OwaNotifier.setProps("closeWindow", null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		try {
+			OwaNotifier.setProps("listenPort", "8081");
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		doGet(8081);
+	}
+	
+	@Test
 	public void testWithoutCloseWindow() {
 		OwaNotifier.testMode = true;
 		try {
