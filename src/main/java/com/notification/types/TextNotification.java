@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import com.theme.WindowTheme;
 public class TextNotification extends BorderLayoutNotification {
 	protected JLabel m_titleLabel;
 	protected JTextArea m_subtitleArea;
+	protected JLabel m_fromLabel;
 
 	private TextTheme m_textTheme;
 
@@ -28,8 +30,11 @@ public class TextNotification extends BorderLayoutNotification {
 	}
 	
 	public TextNotification() {
+		m_fromLabel = new JLabel();
 		m_titleLabel = new JLabel();
 		m_subtitleArea = new JTextArea();
+		JPanel panelHeader = new JPanel();
+		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.PAGE_AXIS));
 		JButton dimissButton = new JButton();
 		dimissButton.setText("X");
 		final TextNotification me = this;
@@ -47,7 +52,9 @@ public class TextNotification extends BorderLayoutNotification {
 		dimissButton.setBorderPainted(false);
 		dimissButton.setBounds((int) (this.getWidth() - dimissButton.getPreferredSize().getWidth()), 0, (int) dimissButton.getPreferredSize().getWidth(), (int) dimissButton.getPreferredSize().getHeight());
 		m_panel.add(dimissButton);
-		this.addComponent(m_titleLabel, BorderLayout.NORTH);
+		panelHeader.add(m_fromLabel);
+		panelHeader.add(m_titleLabel);
+		this.addComponent(panelHeader, BorderLayout.NORTH);
 		this.addComponent(m_subtitleArea, BorderLayout.CENTER);
 	}
 
@@ -56,7 +63,7 @@ public class TextNotification extends BorderLayoutNotification {
 	}
 
 	public void setTitle(String title) {
-		m_titleLabel.setText(title);
+		m_titleLabel.setText("<html><u>" + title + "</u></html>");
 	}
 
 	public String getSubtitle() {
@@ -79,8 +86,10 @@ public class TextNotification extends BorderLayoutNotification {
 		m_textTheme = theme;
 		m_titleLabel.setFont(theme.title);
 		m_subtitleArea.setFont(theme.subtitle);
+		m_fromLabel.setFont(theme.from);
 		m_titleLabel.setForeground(theme.titleColor);
 		m_subtitleArea.setForeground(theme.subtitleColor);
+		m_fromLabel.setForeground(theme.fromColor);
 	}
 
 	@Override
@@ -91,5 +100,10 @@ public class TextNotification extends BorderLayoutNotification {
 			m_titleLabel.setForeground(m_textTheme.titleColor);
 			m_subtitleArea.setForeground(m_textTheme.subtitleColor);
 		}
+	}
+
+	public void setFrom(String string) {
+		m_fromLabel.setText(string);
+		
 	}
 }
