@@ -110,6 +110,7 @@ public class ClientHandler extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			OwaNotifier.exit(255);
 		}
 	}
 }

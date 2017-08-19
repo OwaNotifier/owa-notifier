@@ -61,7 +61,7 @@ public class ClientHandlerTest {
 			client.start();
 			Socket s = serverSocket.accept();
 			UUID nonce = UUID.randomUUID();
-			ClientHandler c = new ClientHandler(s, nonce.toString(), 8080);
+			ClientHandler c = new ClientHandler(s, nonce.toString());
 			try {
 				c.join();
 			} catch (InterruptedException e) {
