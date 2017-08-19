@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -39,7 +40,13 @@ public class ClientHandlerTest {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet();
+		try {
+			OwaNotifier.setProps("listenPort", "8080");
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		doGet(8080);
 	}
 	
 	@Test
@@ -51,35 +58,53 @@ public class ClientHandlerTest {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet();
+		try {
+			OwaNotifier.setProps("listenPort", "8081");
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		doGet(8081);
 	}
 	
-	private void doGet() {
-		Thread client = new Thread() {
-			public void run() {
-		         try {
-		        	try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					Socket client = new Socket("localhost", 8080);
-					BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-							client.getOutputStream()));
-					BufferedReader in = new BufferedReader(new InputStreamReader(
-							client.getInputStream()));
-					out.write(payloadQuery);
-					out.close();
-					
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+	private void doGet(int listenPort) {
+		
+		try {
+			ServerSocket serverSocket = null;
+			// Search an available port
+			while(serverSocket == null) {
+				try {
+					OwaNotifier.log("update listen port to " + listenPort);
+					serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
+				} catch (BindException e){
+					listenPort = listenPort +1;
+					OwaNotifier.setProps("listenPort", listenPort + "");
 				}
 			}
-		};
-		try {
-			final ServerSocket serverSocket = new ServerSocket(8080);
+			final int listenPortFinal = listenPort;
+			Thread client = new Thread() {
+				public void run() {
+			         try {
+			        	try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Socket client = new Socket("localhost", listenPortFinal);
+						BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+								client.getOutputStream()));
+						BufferedReader in = new BufferedReader(new InputStreamReader(
+								client.getInputStream()));
+						out.write(payloadQuery);
+						out.close();
+						
+					} catch (UnknownHostException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};	
 			client.start();
 			Socket s = serverSocket.accept();
 			UUID nonce = UUID.randomUUID();
@@ -90,7 +115,8 @@ public class ClientHandlerTest {
 				e.printStackTrace();
 			}
 			// Token is null because expiration time
-			assertTrue(c.tokenResponse == null);
+			assertTrue(c.tokenResponse != null);
+			assertTrue(c.tokenResponse.getError().contains("RetrofitError"));
 			// idToken is not null
 			assertTrue(c.idTokenObj != null);
 			s.close();

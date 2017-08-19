@@ -113,6 +113,11 @@ public class AuthHelper {
 			error.setError("IOException");
 			error.setErrorDescription(e.getMessage());
 			return error;
+		} catch (retrofit.RetrofitError e) {
+			TokenResponse error = new TokenResponse();
+			error.setError("RetrofitError");
+			error.setErrorDescription(e.getMessage());
+			return error;
 		}
 	}
 
