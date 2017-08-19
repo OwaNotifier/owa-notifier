@@ -1,21 +1,18 @@
 package info.kapable.utils.owanotifier.auth;
 
-import java.io.FileNotFoundException;
+import info.kapable.utils.owanotifier.JacksonConverter;
+import info.kapable.utils.owanotifier.OwaNotifier;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.Properties;
 import java.util.UUID;
+
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
-
-import info.kapable.utils.owanotifier.JacksonConverter;
-import info.kapable.utils.owanotifier.OwaNotifier;
-import retrofit.RestAdapter;
-import retrofit.client.Client;
-import retrofit.client.OkClient;
 
 public class AuthHelper {
 	private static final String authority = "https://login.microsoftonline.com";

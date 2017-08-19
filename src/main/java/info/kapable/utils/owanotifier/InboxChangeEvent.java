@@ -1,5 +1,6 @@
 package info.kapable.utils.owanotifier;
 
+import info.kapable.utils.owanotifier.service.EmailAddress;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.service.Message;
 
@@ -10,6 +11,7 @@ public class InboxChangeEvent {
 	
 	private Folder inbox;
 	private int eventType=0;
+	private String eventFrom;
 	private String eventText;
 	private Message message;
 	
@@ -22,6 +24,8 @@ public class InboxChangeEvent {
 	public InboxChangeEvent(Folder inbox, Message message) {
 		this(inbox, TYPE_ONE_NEW_MSG, message.getBodyPreview());
 		this.message = message;
+		EmailAddress addr = message.getFrom().getEmailAddress();
+		this.eventFrom = addr.getName() + " <" + addr.getAddress() + ">";
 	}
 
 	public String getEventTitle() {
@@ -69,6 +73,14 @@ public class InboxChangeEvent {
 
 	public void setMessage(Message message) {
 		this.message = message;
+	}
+
+	public String getEventFrom() {
+		return eventFrom;
+	}
+
+	public void setEventFrom(String eventFrom) {
+		this.eventFrom = eventFrom;
 	}
 	
 }

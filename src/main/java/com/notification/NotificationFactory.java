@@ -168,12 +168,13 @@ public final class NotificationFactory {
 	 *            the title to display on the IconNotification
 	 * @param subtitle
 	 *            the subtitle to display on the IconNotification
+	 * @param message 
 	 * @param icon
 	 *            the icon on the IconNotification
 	 * @return the built IconNotification
 	 */
-	public IconNotification buildIconNotification(String title, String subtitle, ImageIcon icon) {
-		return build(IconNotification.class, title, subtitle, icon);
+	public IconNotification buildIconNotification(String from, String title, String subtitle, ImageIcon icon) {
+		return build(IconNotification.class, from, title, subtitle, icon);
 	}
 
 	/**
@@ -196,8 +197,9 @@ public final class NotificationFactory {
 			TextNotification note = new TextNotification();
 			note.setWindowTheme(pack.getTheme(WindowTheme.class));
 			note.setTextTheme(pack.getTheme(TextTheme.class));
-			note.setTitle((String) args[0]);
-			note.setSubtitle((String) args[1]);
+			note.setFrom((String) args[1]);
+			note.setTitle((String) args[1]);
+			note.setSubtitle((String) args[2]);
 			return note;
 		}
 	}
@@ -212,8 +214,9 @@ public final class NotificationFactory {
 			AcceptNotification note = new AcceptNotification();
 			note.setWindowTheme(pack.getTheme(WindowTheme.class));
 			note.setTextTheme(pack.getTheme(TextTheme.class));
-			note.setTitle((String) args[0]);
-			note.setSubtitle((String) args[1]);
+			note.setFrom((String) args[0]);
+			note.setTitle((String) args[1]);
+			note.setSubtitle((String) args[2]);
 			if (args.length == 4) {
 				note.setAcceptText((String) args[2]);
 				note.setDeclineText((String) args[3]);
@@ -226,15 +229,16 @@ public final class NotificationFactory {
 	private class IconNotificationBuilder implements NotificationBuilder<IconNotification> {
 		@Override
 		public IconNotification buildNotification(ThemePackage pack, Object... args) {
-			if (args.length != 3)
+			if (args.length != 4)
 				throw new NotificationException("IconNotifications need three arguments: title, subtitle, icon!");
 
 			IconNotification note = new IconNotification();
 			note.setWindowTheme(pack.getTheme(WindowTheme.class));
 			note.setTextTheme(pack.getTheme(TextTheme.class));
-			note.setTitle((String) args[0]);
-			note.setSubtitle((String) args[1]);
-			note.setIcon((Icon) args[2]);
+			note.setFrom((String) args[0]);
+			note.setTitle((String) args[1]);
+			note.setSubtitle((String) args[2]);
+			note.setIcon((Icon) args[3]);
 			return note;
 		}
 	}
