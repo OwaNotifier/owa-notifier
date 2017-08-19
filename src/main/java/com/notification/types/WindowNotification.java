@@ -10,7 +10,7 @@ import javax.swing.JWindow;
 
 import com.notification.Notification;
 
-import info.kapable.info.utils.owanotifier.theme.WindowTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 import info.kapable.utils.owanotifier.utils.MathUtils;
 
 /**

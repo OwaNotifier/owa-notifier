@@ -1,6 +1,6 @@
 package com.notification;
 
-import info.kapable.info.utils.owanotifier.theme.ThemePackage;
+import info.kapable.utils.owanotifier.theme.ThemePackage;
 
 /**
  * This interface is implemented for building custom Notifications.

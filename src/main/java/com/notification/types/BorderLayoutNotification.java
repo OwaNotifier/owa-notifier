@@ -6,7 +6,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import info.kapable.info.utils.owanotifier.theme.WindowTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * Lays out Swing Components in a BorderLayout.

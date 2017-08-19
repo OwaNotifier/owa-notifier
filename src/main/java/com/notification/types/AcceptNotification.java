@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import info.kapable.info.utils.owanotifier.theme.TextTheme;
-import info.kapable.info.utils.owanotifier.theme.WindowTheme;
+import info.kapable.utils.owanotifier.theme.TextTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * This is a Notification that will ask the user to accept of decline a certain action.

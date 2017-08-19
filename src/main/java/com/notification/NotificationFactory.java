@@ -10,11 +10,11 @@ import com.notification.types.IconNotification;
 import com.notification.types.ProgressBarNotification;
 import com.notification.types.TextNotification;
 
-import info.kapable.info.utils.owanotifier.theme.TextTheme;
-import info.kapable.info.utils.owanotifier.theme.ThemePackage;
-import info.kapable.info.utils.owanotifier.theme.ThemePackagePresets;
-import info.kapable.info.utils.owanotifier.theme.WindowTheme;
 import info.kapable.utils.owanotifier.exception.NotificationException;
+import info.kapable.utils.owanotifier.theme.TextTheme;
+import info.kapable.utils.owanotifier.theme.ThemePackage;
+import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * Creates Notifications using a ThemePackage. It is possible to add custom Notifications by adding

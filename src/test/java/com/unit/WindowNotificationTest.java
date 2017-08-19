@@ -17,7 +17,7 @@ import com.notification.NotificationListener;
 import com.notification.types.TextNotification;
 import com.notification.types.WindowNotification;
 
-import info.kapable.info.utils.owanotifier.theme.WindowTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 public class WindowNotificationTest {
 	/*@Test

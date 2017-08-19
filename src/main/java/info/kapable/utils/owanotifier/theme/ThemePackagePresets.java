@@ -1,4 +1,4 @@
-package info.kapable.info.utils.owanotifier.theme;
+package info.kapable.utils.owanotifier.theme;
 
 import java.awt.Color;
 import java.awt.Font;
