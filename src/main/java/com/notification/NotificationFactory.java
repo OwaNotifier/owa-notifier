@@ -5,7 +5,6 @@ import java.util.HashMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import com.exception.NotificationException;
 import com.notification.types.AcceptNotification;
 import com.notification.types.IconNotification;
 import com.notification.types.ProgressBarNotification;
@@ -14,6 +13,8 @@ import com.theme.TextTheme;
 import com.theme.ThemePackage;
 import com.theme.ThemePackagePresets;
 import com.theme.WindowTheme;
+
+import info.kapable.utils.owanotifier.exception.NotificationException;
 
 /**
  * Creates Notifications using a ThemePackage. It is possible to add custom Notifications by adding

@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
 import com.notification.NotificationManager;
-import com.platform.Platform;
 import com.utils.Screen;
 import com.utils.Time;
 
@@ -61,8 +60,6 @@ public class SimpleManager extends NotificationManager {
 	 * @return whether or not fading is enabled
 	 */
 	public boolean isFadeEnabled() {
-		syncFadeEnabledWithPlatform();
-
 		return m_fadeEnabled;
 	}
 
@@ -84,13 +81,6 @@ public class SimpleManager extends NotificationManager {
 			m_fader = null;
 			m_faderThread = null;
 		}
-
-		syncFadeEnabledWithPlatform();
-	}
-
-	private void syncFadeEnabledWithPlatform() {
-		if (m_fadeEnabled && Platform.instance().isUsed())
-			m_fadeEnabled = Platform.instance().isSupported("fade");
 	}
 
 	/**

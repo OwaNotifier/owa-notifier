@@ -1,4 +1,4 @@
-package com.exception;
+package info.kapable.utils.owanotifier.exception;
 
 public class NotificationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

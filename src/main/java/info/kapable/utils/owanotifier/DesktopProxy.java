@@ -31,7 +31,6 @@ import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
-import com.platform.Platform;
 import com.theme.ThemePackagePresets;
 import com.utils.Time;
 
@@ -61,7 +60,7 @@ public class DesktopProxy implements Observer {
 	 * @throws MalformedURLException
 	 *             in case of url is not an url
 	 */
-	public void browse(String url) throws MalformedURLException {
+	public static void browse(String url) throws MalformedURLException {
 		// Start browser
 		if (Desktop.isDesktopSupported()) {
 			Desktop dt = Desktop.getDesktop();
@@ -109,8 +108,6 @@ public class DesktopProxy implements Observer {
 	 * @throws Exception
 	 */
 	public void notify(String title, String message) {
-		Platform.instance().setAdjustForPlatform(true);
-
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 

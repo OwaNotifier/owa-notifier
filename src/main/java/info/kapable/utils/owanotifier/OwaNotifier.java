@@ -24,14 +24,24 @@ import info.kapable.utils.owanotifier.service.Message;
 import info.kapable.utils.owanotifier.service.MessageCollection;
 import info.kapable.utils.owanotifier.service.OutlookService;
 import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
-import info.kapable.utils.owanotifier.service.OutlookUser;
 
+/**
+ * OwaNotifier main class
+ *  - Load config
+ *  - start oauth2 client daemon
+ *  - main loop to check new mail
+ * 
+ * @author Mathieu GOULIN
+ *
+ */
 public class OwaNotifier extends Observable {
+	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
+	// props contains application configuration
 	public static Properties props;
+	
+	// A public object to store auth 
 	public TokenResponse tokenResponse;
-	public DesktopProxy desktop;
-	private String email;
 	
 	/**
 	 * Load config from properties in ressource
@@ -49,12 +59,27 @@ public class OwaNotifier extends Observable {
 		}
 	}
 	
+	/**
+	 * return properties
+	 * @return
+	 * @throws IOException
+	 */
 	public static Properties getProps() throws IOException {
 		if(OwaNotifier.props == null) {
 			loadConfig();
 		}
 		return OwaNotifier.props;
 	}
+	
+	/**
+	 * Update a property
+	 * @param key
+	 * @param value
+	 */
+	private static void setProps(String key, String value) {
+		OwaNotifier.props.put(key, value);
+	}
+	
 	/**
 	 * Main function swith from static domain to object
 	 * @param args
@@ -72,9 +97,16 @@ public class OwaNotifier extends Observable {
 	 */
 	private void boot() {
 		OwaNotifier.log("--- Owa-Notifier ---");
-		this.desktop = new DesktopProxy();
-		this.addObserver(this.desktop);
+		
+		// Add different notification observer
+		//
+		this.addObserver(new DesktopProxy());
+		
+		// Load token from oauth2 process
+		// Display login page
 		this.login();
+		
+		// When login is ok loop
 		try {
 			this.infiniteLoop();
 		} catch (JsonParseException e) {
@@ -100,33 +132,40 @@ public class OwaNotifier extends Observable {
 		UUID state = UUID.randomUUID();
 		UUID nonce = UUID.randomUUID();
 		
-		// Start a webserver to handle return of authenficatoion
+		// Start a webserver to handle return of oauth
 		try {
 			int listenPort = Integer.parseInt(OwaNotifier.getProps().getProperty("listenPort", "8080"));
 			ServerSocket serverSocket = null;
+			
+			// Search an available port
 			while(serverSocket == null) {
 				try {
 					OwaNotifier.log("update listen port to " + listenPort);
 					serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
 				} catch (BindException e){
 					listenPort = listenPort +1;
+					OwaNotifier.setProps("listenPort", listenPort + "");
 				}
 			}
 			
-			// Redirect user to authentification webpage
+			// Redirect user to ms authentification webpage
 			String loginUrl = AuthHelper.getLoginUrl(state, nonce, listenPort);
-			System.out.println(" * loginUrl: " + loginUrl);
+			OwaNotifier.log(" * loginUrl: " + loginUrl);
 			try {
-				this.desktop.browse(loginUrl);
+				DesktopProxy.browse(loginUrl);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 				OwaNotifier.exit(3);
 			}
-			Socket s = serverSocket.accept(); // Wait for a client to connect
-			ClientHandler c = new ClientHandler(s, nonce.toString(), listenPort); // Handle the client in a separate thread
+			// Wait for a client to connect
+			Socket s = serverSocket.accept(); 
+			ClientHandler c = new ClientHandler(s, nonce.toString()); // Handle the client in a separate thread
+			// Wait return of webserver
 			c.join();
 			s.close();
 			serverSocket.close();
+			
+			// Save tokenResponse in case of success
 			if(c.tokenResponse == null) {
 				OwaNotifier.log("No token, error");
 				OwaNotifier.exit(5);
@@ -143,10 +182,7 @@ public class OwaNotifier extends Observable {
 		int lastUnreadCount = 0;
 		String folder = "inbox";
 		JacksonConverter c = new JacksonConverter(new ObjectMapper());
-		OutlookService outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), email);
-		OutlookUser user = (OutlookUser) c.fromBody(outlookService.getCurrentUser().getBody(), OutlookUser.class);
-		this.email = user.getMail();
-		System.out.println(email);
+		OutlookService outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);
 		
 		while (true) {
 			Thread.sleep(5000);

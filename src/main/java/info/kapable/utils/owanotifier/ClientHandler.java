@@ -18,13 +18,11 @@ public class ClientHandler extends Thread {
 	private String idToken;
 	public TokenResponse tokenResponse = null;
 	public IdToken idTokenObj;
-	private int listenPort;
 
 	// Start the thread in the constructor
-	public ClientHandler(Socket s, String nonce, int listenPort) {
+	public ClientHandler(Socket s, String nonce) {
 		socket = s;
 		expectedNonce = nonce;
-		listenPort = listenPort;
 		start();
 	}
 
@@ -85,7 +83,7 @@ public class ClientHandler extends Thread {
 			out.close();
 			this.idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
 			if (idTokenObj != null) {
-				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId(), listenPort);
+				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
