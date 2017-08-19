@@ -96,8 +96,10 @@ public class OwaNotifier extends Observable {
 	 * Update a property
 	 * @param key
 	 * @param value
+	 * @throws IOException 
 	 */
-	private static void setProps(String key, String value) {
+	static void setProps(String key, String value) throws IOException {
+		loadConfig();
 		OwaNotifier.props.put(key, value);
 	}
 
