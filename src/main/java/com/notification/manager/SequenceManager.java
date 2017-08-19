@@ -7,7 +7,8 @@ import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
 import com.notification.NotificationListener;
 import com.notification.types.WindowNotification;
-import com.utils.Time;
+
+import info.kapable.utils.owanotifier.utils.Time;
 
 /**
  * Displays Notifications one after another in a certain location. As soon as the current Notification is hidden, a new

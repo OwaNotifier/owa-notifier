@@ -8,7 +8,8 @@ import javax.swing.Timer;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
-import com.utils.MathUtils;
+
+import info.kapable.utils.owanotifier.utils.MathUtils;
 
 /**
  * A NotificationManager which slides old Notifications above or below new Notifications.

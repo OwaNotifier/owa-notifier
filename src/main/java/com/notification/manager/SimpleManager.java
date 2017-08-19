@@ -5,9 +5,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
+
+import info.kapable.utils.owanotifier.utils.Screen;
+import info.kapable.utils.owanotifier.utils.Time;
+
 import com.notification.NotificationManager;
-import com.utils.Screen;
-import com.utils.Time;
 
 /**
  * Simply displays new Notifications in one corner of the screen on top of each other. Has an option for fading (note -

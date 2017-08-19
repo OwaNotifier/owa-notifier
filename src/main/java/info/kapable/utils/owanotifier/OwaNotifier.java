@@ -1,3 +1,26 @@
+/**
+The MIT License (MIT)
+
+Copyright (c) 2017 Mathieu GOULIN
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
 package info.kapable.utils.owanotifier;
 
 import java.io.FileNotFoundException;
@@ -8,7 +31,6 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.UUID;
@@ -31,8 +53,7 @@ import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
  *  - start oauth2 client daemon
  *  - main loop to check new mail
  * 
- * @author Mathieu GOULIN
- *
+ * @author Mathieu GOULIN <mathieu.goulin@gadz.org>
  */
 public class OwaNotifier extends Observable {
 	// testMode is true when using this class on jUnit context
@@ -79,7 +100,23 @@ public class OwaNotifier extends Observable {
 	private static void setProps(String key, String value) {
 		OwaNotifier.props.put(key, value);
 	}
-	
+
+	/**
+	 * Log a message to console
+	 * @param msg
+	 */
+	public static void log(String msg) {
+		System.out.println(msg);
+	}
+
+	/**
+	 * Exit application with code
+	 * @param rc code to exit application
+	 */
+	public static void exit(int rc) {
+		log("Exit with code : " + rc);
+		System.exit(rc);
+	}
 	/**
 	 * Main function swith from static domain to object
 	 * @param args
@@ -178,6 +215,14 @@ public class OwaNotifier extends Observable {
 		}
 	}
 
+	/**
+	 * Loop until end to get unread mail count
+	 * 
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public void infiniteLoop() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
 		int lastUnreadCount = 0;
 		String folder = "inbox";
@@ -206,22 +251,5 @@ public class OwaNotifier extends Observable {
 			}
 			lastUnreadCount = inbox.getUnreadItemCount();
 		}
-	}
-	
-	/**
-	 * Log a message to console
-	 * @param msg
-	 */
-	public static void log(String msg) {
-		System.out.println(msg);
-	}
-
-	/**
-	 * Exit application with code
-	 * @param rc code to exit application
-	 */
-	public static void exit(int rc) {
-		log("Exit with code : " + rc);
-		System.exit(rc);
 	}
 }

@@ -1,4 +1,4 @@
-package com.utils;
+package info.kapable.utils.owanotifier.utils;
 
 public class MathUtils {
 	/**

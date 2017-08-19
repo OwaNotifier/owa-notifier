@@ -1,4 +1,4 @@
-package com.utils;
+package info.kapable.utils.owanotifier.utils;
 
 /**
  * Represents a time, which can be used for the duration of a Notification, fade times, etc.

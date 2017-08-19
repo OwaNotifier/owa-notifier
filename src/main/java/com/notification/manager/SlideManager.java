@@ -8,9 +8,11 @@ import javax.swing.Timer;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
+
+import info.kapable.utils.owanotifier.utils.Screen;
+import info.kapable.utils.owanotifier.utils.Time;
+
 import com.notification.NotificationManager;
-import com.utils.Screen;
-import com.utils.Time;
 
 /**
  * Slides Notifications into a certain area. This may not work on all machines.

@@ -1,4 +1,4 @@
-package com.utils;
+package info.kapable.utils.owanotifier.utils;
 
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
