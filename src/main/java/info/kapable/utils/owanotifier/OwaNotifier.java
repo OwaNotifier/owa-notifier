@@ -99,7 +99,7 @@ public class OwaNotifier extends Observable {
 	 * @throws IOException 
 	 */
 	static void setProps(String key, String value) throws IOException {
-		loadConfig();
+		OwaNotifier.getProps();
 		if(value != null)
 			OwaNotifier.props.put(key, value);
 		else
