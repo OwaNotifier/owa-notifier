@@ -11,8 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import com.theme.TextTheme;
-import com.theme.WindowTheme;
+import info.kapable.info.utils.owanotifier.theme.TextTheme;
+import info.kapable.info.utils.owanotifier.theme.WindowTheme;
 
 /**
  * A text notification which will display a title and a subtitle.

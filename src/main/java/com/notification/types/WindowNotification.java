@@ -9,8 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.JWindow;
 
 import com.notification.Notification;
-import com.theme.WindowTheme;
 import com.utils.MathUtils;
+
+import info.kapable.info.utils.owanotifier.theme.WindowTheme;
 
 /**
  * A Notification which displays in a JWindow, handles click events, and allows subclasses to supply a JPanel. The

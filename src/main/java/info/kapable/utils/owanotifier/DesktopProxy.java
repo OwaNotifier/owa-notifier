@@ -1,5 +1,6 @@
 package info.kapable.utils.owanotifier;
 
+import info.kapable.info.utils.owanotifier.theme.ThemePackagePresets;
 import info.kapable.utils.owanotifier.service.Folder;
 
 import java.awt.AWTException;
@@ -31,7 +32,6 @@ import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
-import com.theme.ThemePackagePresets;
 import com.utils.Time;
 
 public class DesktopProxy implements Observer {

@@ -9,11 +9,11 @@ import com.notification.types.AcceptNotification;
 import com.notification.types.IconNotification;
 import com.notification.types.ProgressBarNotification;
 import com.notification.types.TextNotification;
-import com.theme.TextTheme;
-import com.theme.ThemePackage;
-import com.theme.ThemePackagePresets;
-import com.theme.WindowTheme;
 
+import info.kapable.info.utils.owanotifier.theme.TextTheme;
+import info.kapable.info.utils.owanotifier.theme.ThemePackage;
+import info.kapable.info.utils.owanotifier.theme.ThemePackagePresets;
+import info.kapable.info.utils.owanotifier.theme.WindowTheme;
 import info.kapable.utils.owanotifier.exception.NotificationException;
 
 /**

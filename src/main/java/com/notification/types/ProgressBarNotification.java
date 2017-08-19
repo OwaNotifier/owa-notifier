@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import com.theme.TextTheme;
+import info.kapable.info.utils.owanotifier.theme.TextTheme;
 
 public class ProgressBarNotification extends BorderLayoutNotification {
 	private JLabel m_label;
