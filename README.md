@@ -6,6 +6,9 @@ This application display notification when number of unread mail change in a Off
 
 
 # Screenshot
+
+There is 2 way to display new mail notification with Owa-Notifier :
+
 ## On windows 10 using system notification
 ![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-notification.png "Screenshot Notification")
 
@@ -13,6 +16,9 @@ This application display notification when number of unread mail change in a Off
 ![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-swing-notification.png "Screenshot Using Swing Notification")
 
 ## Tray icon
+
+When running the application display a icon tray. 
+
 ![screenshot-tray](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-tray.png "Screenshot tray-icon")
 
 # Minimum requirement :
