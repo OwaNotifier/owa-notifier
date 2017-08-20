@@ -21,8 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package info.kapable.utils.owanotifier;
+package info.kapable.utils.owanotifier.desktop;
 
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
 import info.kapable.utils.owanotifier.utils.Time;
