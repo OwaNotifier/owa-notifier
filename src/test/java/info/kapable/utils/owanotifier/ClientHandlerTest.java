@@ -15,6 +15,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
+
 public class ClientHandlerTest {
 
 	private String payloadQuery = "POST /authorize.html HTTP/1.1" 
@@ -126,7 +128,7 @@ public class ClientHandlerTest {
 			client.start();
 			Socket s = serverSocket.accept();
 			UUID nonce = UUID.randomUUID();
-			ClientHandler c = new ClientHandler(s, nonce.toString());
+			WebserverClientHandler c = new WebserverClientHandler(s, nonce.toString());
 			try {
 				c.join();
 			} catch (InterruptedException e) {

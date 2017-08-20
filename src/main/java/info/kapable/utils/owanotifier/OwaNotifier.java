@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.kapable.utils.owanotifier.auth.AuthHelper;
+import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
 import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
@@ -205,7 +206,7 @@ public class OwaNotifier extends Observable {
 			}
 			// Wait for a client to connect
 			Socket s = serverSocket.accept(); 
-			ClientHandler c = new ClientHandler(s, nonce.toString()); // Handle the client in a separate thread
+			WebserverClientHandler c = new WebserverClientHandler(s, nonce.toString()); // Handle the client in a separate thread
 			// Wait return of webserver
 			c.join();
 			s.close();

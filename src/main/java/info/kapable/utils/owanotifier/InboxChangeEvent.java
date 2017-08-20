@@ -27,7 +27,11 @@ import info.kapable.utils.owanotifier.service.EmailAddress;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.service.Message;
 
+/**
+ * This class store all informations to display notification
+ */
 public class InboxChangeEvent {
+	// Different type of event
 	public static final int TYPE_MANY_NEW_MSG = 0;
 	public static final int TYPE_ONE_NEW_MSG = 2;
 	public static final int TYPE_LESS_NEW_MSG = 3;
