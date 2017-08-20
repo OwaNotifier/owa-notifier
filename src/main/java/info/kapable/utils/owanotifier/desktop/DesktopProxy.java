@@ -72,6 +72,12 @@ public abstract class DesktopProxy implements Observer {
 		}
 	}
 
+	/**
+	 * This function is call web event is throw 
+	 * Display notification on destop
+	 * @param event
+	 * @throws IOException
+	 */
 	protected abstract void processEvent(InboxChangeEvent event) throws IOException;
 	
 	/**
@@ -102,51 +108,6 @@ public abstract class DesktopProxy implements Observer {
 			OwaNotifier.exit(1);
 		}
 	}
-
-	/**
-	 * Display message in tray
-	 * 
-	 * @param message
-	 * @throws AWTException
-	 * @throws java.net.MalformedURLException
-	 */
-	public void displayTray(String from, String subject, String message) throws AWTException, java.net.MalformedURLException {
-		try {
-			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
-			} else {
-				this.notify(from, subject, message);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Send notification to desktop
-	 * @param title
-	 * @param message
-	 * @throws Exception
-	 */
-	public void notify(String from, String title, String message) {
-
-		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
-		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
-
-		final IconNotification icon = factory.buildIconNotification("De: " + from,title, message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-		
-		
-		try {
-			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	
 	@Override
 	public void update(Observable o, Object arg) {
@@ -157,17 +118,5 @@ public abstract class DesktopProxy implements Observer {
 			e1.printStackTrace();
 			OwaNotifier.exit(255);
 		}
-		if (SystemTray.isSupported() && event.getEventType() != InboxChangeEvent.TYPE_LESS_NEW_MSG) {
-			try {
-				this.displayTray(event.getEventFrom(), event.getEventTitle(), event.getEventText());
-				OwaNotifier.log(event.getEventText());
-			} catch (AWTException e) {
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		} 
-
 	}
-
 }

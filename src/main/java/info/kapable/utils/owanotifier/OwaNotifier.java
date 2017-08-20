@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.kapable.utils.owanotifier.auth.AuthHelper;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
+import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
 import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.service.Message;
@@ -145,6 +146,7 @@ public class OwaNotifier extends Observable {
 		// Add different notification observer
 		//
 		this.addObserver(new SystemDesktopProxy());
+		this.addObserver(new SwingDesktopProxy());
 		
 		// Load token from oauth2 process
 		// Display login page
