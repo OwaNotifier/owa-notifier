@@ -1,4 +1,4 @@
-package com.unit;
+package info.kapable.utils.owanotifier.utils;
 
 import com.notification.types.ProgressBarNotification;
 

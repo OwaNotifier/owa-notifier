@@ -36,18 +36,33 @@ public class InboxChangeEvent {
 	public static final int TYPE_ONE_NEW_MSG = 2;
 	public static final int TYPE_LESS_NEW_MSG = 3;
 	
+	// The folder
 	private Folder inbox;
-	private int eventType=0;
+	// The type of event
+	private int eventType=TYPE_MANY_NEW_MSG;
+	
+	// Event data
 	private String eventFrom;
 	private String eventText;
 	private Message message;
 	
+	/**
+	 * Create a new event with only text
+	 * @param inbox
+	 * @param eventType
+	 * @param eventText
+	 */
 	public InboxChangeEvent(Folder inbox, int eventType, String eventText) {
 		this.inbox = inbox;
 		this.eventType = eventType;
 		this.eventText = eventText;
 	}
 	
+	/**
+	 * Create a new event with a new message
+	 * @param inbox
+	 * @param message
+	 */
 	public InboxChangeEvent(Folder inbox, Message message) {
 		this(inbox, TYPE_ONE_NEW_MSG, message.getBodyPreview());
 		this.message = message;
@@ -55,6 +70,10 @@ public class InboxChangeEvent {
 		this.eventFrom = addr.getName() + " <" + addr.getAddress() + ">";
 	}
 
+	/**
+	 * Return the title of new event depending of eventType
+	 * @return
+	 */
 	public String getEventTitle() {
 		if(this.eventType == TYPE_MANY_NEW_MSG) {
 			return "Nouveaux Messages";
@@ -69,15 +88,23 @@ public class InboxChangeEvent {
 	}
 
 
+	/**
+	 * Return inbox associated to event
+	 * @return
+	 */
 	public Folder getInbox() {
 		return inbox;
 	}
 
-
+	/**
+	 * Set inbox on event
+	 * @param inbox
+	 */
 	public void setInbox(Folder inbox) {
 		this.inbox = inbox;
 	}
-
+	
+	
 	public int getEventType() {
 		return eventType;
 	}
