@@ -59,26 +59,23 @@ import com.notification.NotificationFactory.Location;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
 
-public class DesktopProxy implements Observer {
+public abstract class DesktopProxy implements Observer {
 
-	private TrayIcon trayIcon;
-	private Image icon;
-
-	/**
-	 * Init the desktop proxy to interface with desktop
-	 */
+	protected Image icon;
+	
 	public DesktopProxy() {
-		this.initTray();
 		try {
 			this.icon = ImageIO.read(getClass().getClassLoader().getResource("icon.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			OwaNotifier.exit(107);
 		}
 	}
 
+	protected abstract void processEvent(InboxChangeEvent event) throws IOException;
+	
 	/**
-	 * Start browser to go on url
+	 * Static method to start browser redirect user to url
 	 * 
 	 * @param url
 	 *            the page web to follow
@@ -116,7 +113,6 @@ public class DesktopProxy implements Observer {
 	public void displayTray(String from, String subject, String message) throws AWTException, java.net.MalformedURLException {
 		try {
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
-				trayIcon.displayMessage(subject, message, MessageType.INFO);
 			} else {
 				this.notify(from, subject, message);
 			}
@@ -139,28 +135,7 @@ public class DesktopProxy implements Observer {
 
 		final IconNotification icon = factory.buildIconNotification("De: " + from,title, message,	new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
 		
-		icon.addActionListener(new MouseAdapter  (){
-			@Override
-		    public void mousePressed(MouseEvent e) {
-		        System.out.println(e);
-				try {
-					URL f = new URL("https://outlook.office365.com/owa/");
-					try {
-						browse(f.toURI().toString());
-						icon.removeFromManager();
-					} catch (MalformedURLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		    }
-		});
+		
 		try {
 			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
 		} catch (NumberFormatException e) {
@@ -172,86 +147,16 @@ public class DesktopProxy implements Observer {
 		}
 	}
 
-	/**
-	 * init Tray
-	 */
-	public void initTray() {
-		// Obtain only one instance of the SystemTray object
-		SystemTray tray = SystemTray.getSystemTray();
-
-		try {
-			final PopupMenu popup = new PopupMenu();
-
-			// Create a pop-up menu components
-			MenuItem aboutItem = new MenuItem("About");
-			aboutItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "Lien: https://github.com/matgou/owa-notifier", "OwaNotifier: ",
-							JOptionPane.INFORMATION_MESSAGE);
-
-				}
-
-			});
-			MenuItem exitItem = new MenuItem("Exit");
-			exitItem.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					OwaNotifier.log("Exit Perform");
-					OwaNotifier.exit(0);
-				}
-			});
-
-			// Add components to pop-up menu
-			popup.add(aboutItem);
-			popup.addSeparator();
-			popup.add(exitItem);
-
-			// If the icon is a file
-			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
-
-			// Alternative (if the icon is on the classpath):
-			// Image image =
-			// Toolkit.getToolkit().createImage(getClass().getResource("icon.png"));
-			trayIcon = new TrayIcon(image, "Emails");
-			// Let the system resizes the image if needed
-			trayIcon.setImageAutoSize(true);
-			// Set tooltip text for the tray icon
-			trayIcon.setToolTip("Notification de nouveaux courriel(s)");
-			trayIcon.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						Desktop dt = Desktop.getDesktop();
-						URL f;
-						try {
-							f = new URL("https://outlook.office365.com/owa/");
-							dt.browse(f.toURI());
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-				}
-			});
-			trayIcon.setPopupMenu(popup);
-			tray.add(trayIcon);
-		} catch (AWTException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		InboxChangeEvent event = (InboxChangeEvent) arg;
-		Folder inbox = event.getInbox();
+		try {
+			this.processEvent(event);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			OwaNotifier.exit(255);
+		}
 		if (SystemTray.isSupported() && event.getEventType() != InboxChangeEvent.TYPE_LESS_NEW_MSG) {
 			try {
 				this.displayTray(event.getEventFrom(), event.getEventTitle(), event.getEventText());
@@ -261,11 +166,7 @@ public class DesktopProxy implements Observer {
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-		} else {
-			OwaNotifier.log("System tray not supported!");
-		}
-		trayIcon.setImage(this.icon);
-		trayIcon.setToolTip(inbox.getUnreadItemCount() + " message(s) non lu");
+		} 
 
 	}
 

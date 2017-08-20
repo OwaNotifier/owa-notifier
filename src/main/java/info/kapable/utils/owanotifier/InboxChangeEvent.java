@@ -105,5 +105,9 @@ public class InboxChangeEvent {
 	public void setEventFrom(String eventFrom) {
 		this.eventFrom = eventFrom;
 	}
+
+	public int getUnreadItemCount() {
+		return inbox.getUnreadItemCount();
+	}
 	
 }
