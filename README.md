@@ -2,19 +2,26 @@
 [![Build Status](https://travis-ci.org/matgou/owa-notifier.svg?branch=master)](https://travis-ci.org/matgou/owa-notifier)                               
 [![codecov.io](https://codecov.io/github/matgou/owa-notifier/coverage.svg?branch=master)](https://codecov.io/github/matgou/owa-notifier?branch=master)  
 
-This application throw notification when number of unread mail change in a Office365 inbox.
+This application display notification when number of unread mail change in a Office365 inbox. It use oauth2 to get graph.microsoft.com API credential.
 
-It use oauth2 to init credidential.
 
 # Screenshot
-![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/master/src/main/resources/screenshot-notification.png "Screenshot Notification")
-![screenshot-tray](https://raw.githubusercontent.com/matgou/owa-notifier/master/src/main/resources/screenshot-tray.png "Screenshot tray-icon")
+## On windows 10 using system notification
+![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/documentation/screenshot-notification.png "Screenshot Notification")
+
+## On other platform using internal swing notification
+![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/documentation/screenshot-swing-notification.png "Screenshot Using Swing Notification")
+
+## Tray icon
+![screenshot-tray](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-tray.png "Screenshot tray-icon")
+
 # Minimum requirement :
  * java 1.6
  * Desktop environnement
+ * A browser
  * Linux or Windows
  
-# Build with maven : 
+# Build 
 
 ```bash
 mvn clean package
