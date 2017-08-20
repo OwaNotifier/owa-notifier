@@ -7,10 +7,10 @@ This application display notification when number of unread mail change in a Off
 
 # Screenshot
 ## On windows 10 using system notification
-![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/documentation/screenshot-notification.png "Screenshot Notification")
+![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-notification.png "Screenshot Notification")
 
 ## On other platform using internal swing notification
-![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/documentation/screenshot-swing-notification.png "Screenshot Using Swing Notification")
+![screenshot-notification](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-swing-notification.png "Screenshot Using Swing Notification")
 
 ## Tray icon
 ![screenshot-tray](https://raw.githubusercontent.com/matgou/owa-notifier/master/documentation/screenshot-tray.png "Screenshot tray-icon")
