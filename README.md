@@ -4,6 +4,7 @@
 
 This application display notification when number of unread mail change in a Office365 inbox. It use oauth2 to get graph.microsoft.com API credential.
 
+See [documentation](documentation/OperatingPrinciple.md) for more details about operating principle.
 
 # Screenshot
 
