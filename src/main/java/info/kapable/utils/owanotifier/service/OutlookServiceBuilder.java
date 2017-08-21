@@ -5,15 +5,22 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.squareup.okhttp.OkHttpClient;
 
 import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 
 public class OutlookServiceBuilder {
+	
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(OutlookServiceBuilder.class);
 
 	public static OutlookService getOutlookService(String accessTokenSource, String userEmailSource) throws IOException {
 		// Create a request interceptor to add headers that belong on
@@ -55,7 +62,7 @@ public class OutlookServiceBuilder {
 				.setRequestInterceptor(requestInterceptor).setLogLevel(LogLevel.FULL).setLog(new RestAdapter.Log() {
 					@Override
 					public void log(String msg) {
-						System.out.println(msg);
+						logger.debug(msg);
 					}
 				}).setClient(new OkClient(client)).build();
 

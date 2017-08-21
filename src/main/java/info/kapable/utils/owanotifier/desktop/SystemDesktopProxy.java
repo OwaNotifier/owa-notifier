@@ -19,12 +19,18 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.OwaNotifier;
 
 public class SystemDesktopProxy extends DesktopProxy {
 
 	private TrayIcon trayIcon;
+	
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(SystemDesktopProxy.class);
 	
 	/**
 	 * On build load icon.png
@@ -90,7 +96,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OwaNotifier.log("Exit Perform");
+				logger.error("Exit Perform");
 				OwaNotifier.exit(0);
 			}
 		});
@@ -113,7 +119,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 				trayIcon.displayMessage(event.getEventTitle(), event.getEventText(), MessageType.INFO);
 			}
 		} else {
-			OwaNotifier.log("System tray not supported!");
+			logger.error("System tray not supported!");
 		}
 		
 	}

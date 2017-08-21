@@ -31,6 +31,9 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
@@ -50,6 +53,9 @@ public class AuthHelper {
 	private static String appPassword = null;
 	private static String redirectUrl = null;
 
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(AuthHelper.class);
+    
 	private static String getAppId() {
 		if (appId == null) {
 			try {
@@ -187,7 +193,7 @@ public class AuthHelper {
 				.setLogLevel(LogLevel.FULL).setLog(new RestAdapter.Log() {
 					@Override
 					public void log(String msg) {
-						System.out.println(msg);
+						logger.debug(msg);
 					}
 				}).setClient(new OkClient(client)).build();
 

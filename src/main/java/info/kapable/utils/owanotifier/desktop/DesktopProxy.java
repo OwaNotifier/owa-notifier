@@ -25,6 +25,7 @@ package info.kapable.utils.owanotifier.desktop;
 
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
 import info.kapable.utils.owanotifier.utils.Time;
@@ -54,6 +55,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
 import com.notification.manager.SimpleManager;
@@ -62,6 +66,9 @@ import com.notification.types.IconNotification;
 public abstract class DesktopProxy implements Observer {
 
 	protected Image icon;
+
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(DesktopProxy.class);
 	
 	public DesktopProxy() {
 		try {
@@ -104,7 +111,7 @@ public abstract class DesktopProxy implements Observer {
 			}
 		} else {
 			// browser is unsuported
-			OwaNotifier.log("Desktop is unsuported");
+			logger.error("Desktop is unsuported");
 			OwaNotifier.exit(1);
 		}
 	}

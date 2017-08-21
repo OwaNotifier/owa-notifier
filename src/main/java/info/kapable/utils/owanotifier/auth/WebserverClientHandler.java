@@ -30,6 +30,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import info.kapable.utils.owanotifier.OwaNotifier;
 
 public class WebserverClientHandler extends Thread {
@@ -40,6 +43,9 @@ public class WebserverClientHandler extends Thread {
 	public TokenResponse tokenResponse = null;
 	public IdToken idTokenObj;
 
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(WebserverClientHandler.class);
+    
 	// Start the thread in the constructor
 	public WebserverClientHandler(Socket s, String nonce) {
 		socket = s;
@@ -60,7 +66,7 @@ public class WebserverClientHandler extends Thread {
 
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			for (String line = in.readLine(); line != null; line = in.readLine()) {
-				OwaNotifier.log(line);
+				logger.debug(line);
 				if (line.startsWith(contentHeader)) {
 					contentLength = Integer.parseInt(line.substring(contentHeader.length()));
 					break;
@@ -74,11 +80,11 @@ public class WebserverClientHandler extends Thread {
 				dataBuilder.append((char) c);
 			}
 			if (contentLength >= 0) {
-				OwaNotifier.log(dataBuilder.toString());
+				logger.debug(dataBuilder.toString());
 				String[] data = dataBuilder.toString().split("&");
 				for (int i = 0; i < data.length; i++) {
 					String[] array = data[i].split("=");
-					System.out.println(array[0] + " = " + array[1]);
+					logger.debug(array[0] + " = " + array[1]);
 					if (array[0].contains("code")) {
 						this.code = array[1];
 					}
@@ -102,9 +108,21 @@ public class WebserverClientHandler extends Thread {
 			// do not in.close();
 			out.flush();
 			out.close();
+			if(idToken == null) {
+				logger.error("No token in return");
+				OwaNotifier.exit(5);
+			}
 			this.idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
 			if (idTokenObj != null) {
 				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
+				if(this.tokenResponse.getError() == null) {
+					logger.info("User has a valid token");
+				} else {
+					logger.error(this.tokenResponse.getError());
+					logger.error(this.tokenResponse.getErrorDescription());
+					logger.error("User don't have a valid token");
+					OwaNotifier.exit(255);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

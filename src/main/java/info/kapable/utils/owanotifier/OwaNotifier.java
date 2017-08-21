@@ -36,6 +36,9 @@ import java.util.Observable;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,6 +74,10 @@ public class OwaNotifier extends Observable {
 	public TokenResponse tokenResponse;
 	private IdToken idToken;
 	
+	// The logger
+    private static Logger logger = LoggerFactory.getLogger(OwaNotifier.class);
+
+    
 	/**
 	 * Load config from properties in ressource
 	 * @throws IOException
@@ -114,19 +121,11 @@ public class OwaNotifier extends Observable {
 	}
 
 	/**
-	 * Log a message to console
-	 * @param msg
-	 */
-	public static void log(String msg) {
-		System.out.println(msg);
-	}
-
-	/**
 	 * Exit application with code
 	 * @param rc code to exit application
 	 */
 	public static void exit(int rc) {
-		log("Exit with code : " + rc);
+		logger.info("Exit with code : " + rc);
 		System.exit(rc);
 	}
 	/**
@@ -145,7 +144,7 @@ public class OwaNotifier extends Observable {
 	 * Boot application
 	 */
 	private void boot() {
-		OwaNotifier.log("--- Owa-Notifier ---");
+		logger.info("--- Owa-Notifier ---");
 		
 		// Add different notification observer
 		//
@@ -190,7 +189,7 @@ public class OwaNotifier extends Observable {
 			// Search an available port
 			while(serverSocket == null) {
 				try {
-					OwaNotifier.log("update listen port to " + listenPort);
+					logger.info("Use listen port : " + listenPort);
 					serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
 				} catch (BindException e){
 					listenPort = listenPort +1;
@@ -200,7 +199,7 @@ public class OwaNotifier extends Observable {
 			
 			// Redirect user to ms authentification webpage
 			String loginUrl = AuthHelper.getLoginUrl(state, nonce, listenPort);
-			OwaNotifier.log(" * loginUrl: " + loginUrl);
+			logger.info("Redirect user to loginUrl: " + loginUrl);
 			try {
 				DesktopProxy.browse(loginUrl);
 			} catch (MalformedURLException e) {
@@ -217,7 +216,7 @@ public class OwaNotifier extends Observable {
 			
 			// Save tokenResponse in case of success
 			if(c.tokenResponse == null) {
-				OwaNotifier.log("No token, error");
+				logger.error("No token, error");
 				OwaNotifier.exit(5);
 			} else {
 				this.tokenResponse = c.tokenResponse;
@@ -249,12 +248,13 @@ public class OwaNotifier extends Observable {
 		    
 		    // If token is expired refresh token
 			if(this.tokenResponse.getExpirationTime().before(now.getTime())) {
+				logger.info("Refresh Token");
 				this.tokenResponse = AuthHelper.getTokenFromRefresh(this.tokenResponse, this.idToken.getTenantId());
 				outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);				
 			}
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
-			
+			logger.info("New Inbox UnreadItemCount : " + inbox.getUnreadItemCount());
 			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() > (lastUnreadCount +1)) {
 				this.setChanged();
 				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_MANY_NEW_MSG, inbox.getUnreadItemCount() + " message(s) non lu"));
