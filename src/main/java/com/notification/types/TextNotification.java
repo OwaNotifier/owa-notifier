@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
+import info.kapable.utils.owanotifier.desktop.action.NotificationMouseAdapter;
 import info.kapable.utils.owanotifier.theme.TextTheme;
 import info.kapable.utils.owanotifier.theme.WindowTheme;
 
@@ -35,21 +36,11 @@ public class TextNotification extends BorderLayoutNotification {
 	public TextNotification() {
 		m_fromLabel = new JLabel();
 		m_titleLabel = new JLabel();
-		m_titleLabel.addMouseListener(new MouseAdapter() {
-			
-			
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-					DesktopProxy.browse("https://outlook.office.com/owa/");
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-            }
-
-        });
+		m_titleLabel.addMouseListener(new NotificationMouseAdapter(m_titleLabel));
+		
 		m_subtitleArea = new JTextArea();
+		m_subtitleArea.addMouseListener(new NotificationMouseAdapter(m_titleLabel));
+		
 		JPanel panelHeader = new JPanel();
 		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.PAGE_AXIS));
 		JButton dimissButton = new JButton();
@@ -82,7 +73,8 @@ public class TextNotification extends BorderLayoutNotification {
 	}
 
 	public void setTitle(String title) {
-		m_titleLabel.setText("<html><u>" + title + "</u></html>");
+		//m_titleLabel.setText("<html><u>" + title + "</u></html>");
+		m_titleLabel.setText(title);
 	}
 
 	public String getSubtitle() {
