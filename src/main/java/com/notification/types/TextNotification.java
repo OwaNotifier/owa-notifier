@@ -3,7 +3,10 @@ package com.notification.types;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.MalformedURLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import info.kapable.utils.owanotifier.desktop.DesktopProxy;
 import info.kapable.utils.owanotifier.theme.TextTheme;
 import info.kapable.utils.owanotifier.theme.WindowTheme;
 
@@ -21,7 +25,6 @@ public class TextNotification extends BorderLayoutNotification {
 	protected JLabel m_titleLabel;
 	protected JTextArea m_subtitleArea;
 	protected JLabel m_fromLabel;
-
 	private TextTheme m_textTheme;
 
 	public void addActionListener(MouseListener l) {
@@ -32,6 +35,20 @@ public class TextNotification extends BorderLayoutNotification {
 	public TextNotification() {
 		m_fromLabel = new JLabel();
 		m_titleLabel = new JLabel();
+		m_titleLabel.addMouseListener(new MouseAdapter() {
+			
+			
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+					DesktopProxy.browse("https://outlook.office.com/owa/");
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+
+        });
 		m_subtitleArea = new JTextArea();
 		JPanel panelHeader = new JPanel();
 		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.PAGE_AXIS));
@@ -52,6 +69,8 @@ public class TextNotification extends BorderLayoutNotification {
 		dimissButton.setBorderPainted(false);
 		dimissButton.setBounds((int) (this.getWidth() - dimissButton.getPreferredSize().getWidth()), 0, (int) dimissButton.getPreferredSize().getWidth(), (int) dimissButton.getPreferredSize().getHeight());
 		m_panel.add(dimissButton);
+		
+		
 		panelHeader.add(m_fromLabel);
 		panelHeader.add(m_titleLabel);
 		this.addComponent(panelHeader, BorderLayout.NORTH);
@@ -103,7 +122,11 @@ public class TextNotification extends BorderLayoutNotification {
 	}
 
 	public void setFrom(String string) {
-		m_fromLabel.setText(string);
+		if(string == null) {
+			m_fromLabel.setVisible(false);
+		} else {
+			m_fromLabel.setText(string);
+		}
 		
 	}
 }

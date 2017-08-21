@@ -22,13 +22,22 @@ public class SwingDesktopProxy extends DesktopProxy {
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 
-		// The notification window : 
-		final IconNotification icon = factory.buildIconNotification(
+		// The notification window :
+		
+		IconNotification icon;
+		if(event.getEventType() == InboxChangeEvent.TYPE_ONE_NEW_MSG) {
+			icon = factory.buildIconNotification(
 				"De: " + event.getEventFrom(),
 				event.getEventTitle(),
 				event.getEventText(),
 				new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-		
+		} else {
+			icon = factory.buildIconNotification(
+					null,
+					event.getEventTitle(),
+					event.getEventText(),
+					new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		}
 		// Display it :
 		try {
 			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
