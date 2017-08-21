@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.kapable.utils.owanotifier.auth.AuthHelper;
+import info.kapable.utils.owanotifier.auth.IdToken;
 import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
@@ -67,6 +69,7 @@ public class OwaNotifier extends Observable {
 	
 	// A public object to store auth 
 	public TokenResponse tokenResponse;
+	private IdToken idToken;
 	
 	/**
 	 * Load config from properties in ressource
@@ -218,6 +221,7 @@ public class OwaNotifier extends Observable {
 				OwaNotifier.exit(5);
 			} else {
 				this.tokenResponse = c.tokenResponse;
+				this.idToken = c.idTokenObj;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -241,7 +245,13 @@ public class OwaNotifier extends Observable {
 		
 		while (true) {
 			Thread.sleep(5000);
-			
+		    Calendar now = Calendar.getInstance();
+		    
+		    // If token is expired refresh token
+			if(this.tokenResponse.getExpirationTime().before(now.getTime())) {
+				this.tokenResponse = AuthHelper.getTokenFromRefresh(this.tokenResponse, this.idToken.getTenantId());
+				outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);				
+			}
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
 			

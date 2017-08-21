@@ -23,7 +23,7 @@ public class OutlookServiceBuilder {
 		RequestInterceptor requestInterceptor = new RequestInterceptor() {
 			@Override
 			public void intercept(RequestFacade request) {
-				request.addHeader("User-Agent", "java-tutorial");
+				request.addHeader("User-Agent", "owa-notifier-daemon");
 				request.addHeader("client-request-id", UUID.randomUUID().toString());
 				request.addHeader("return-client-request-id", "true");
 				request.addHeader("Authorization", String.format("Bearer %s", accessToken));
