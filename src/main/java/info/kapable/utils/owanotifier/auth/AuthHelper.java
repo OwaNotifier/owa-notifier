@@ -25,6 +25,7 @@ package info.kapable.utils.owanotifier.auth;
 
 import info.kapable.utils.owanotifier.JacksonConverter;
 import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.RestfullAcessProxy;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -118,35 +119,7 @@ public class AuthHelper {
 
 	public static TokenResponse getTokenFromRefresh(TokenResponse tokens,
 			String tenantId) {
-		// Create a logging interceptor to log request and responses
-		OkHttpClient client = new OkHttpClient();
-		String proxy;
-		try {
-			proxy = OwaNotifier.getProps().getProperty("proxyHost");
-			if (proxy != null && !proxy.contentEquals("")) {
-				int proxyPort = Integer.parseInt(OwaNotifier.getProps()
-						.getProperty("proxyPort", "0"));
-				if (proxyPort != 0) {
-					client.setProxy(new Proxy(Proxy.Type.HTTP,
-							new InetSocketAddress(proxy, proxyPort)));
-				}
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		// Create and configure the Retrofit object
-		RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(authority)
-				.setLogLevel(LogLevel.FULL).setLog(new RestAdapter.Log() {
-					@Override
-					public void log(String msg) {
-						System.out.println(msg);
-					}
-				}).setClient(new OkClient(client)).build();
-
-		// Generate the token service
-		TokenService tokenService = retrofit.create(TokenService.class);
+		TokenService tokenService = RestfullAcessProxy.getTokenService(authority);
 
 		try {
 			JacksonConverter c = new JacksonConverter(new ObjectMapper());
@@ -170,36 +143,8 @@ public class AuthHelper {
 
 	public static TokenResponse getTokenFromAuthCode(String authCode,
 			String tenantId) {
-		// Create a logging interceptor to log request and responses
-		OkHttpClient client = new OkHttpClient();
-		String proxy;
-		try {
-			proxy = OwaNotifier.getProps().getProperty("proxyHost");
-			if (proxy != null && !proxy.contentEquals("")) {
-				int proxyPort = Integer.parseInt(OwaNotifier.getProps()
-						.getProperty("proxyPort", "0"));
-				if (proxyPort != 0) {
-					client.setProxy(new Proxy(Proxy.Type.HTTP,
-							new InetSocketAddress(proxy, proxyPort)));
-				}
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		// Create and configure the Retrofit object
-		RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(authority)
-				.setLogLevel(LogLevel.FULL).setLog(new RestAdapter.Log() {
-					@Override
-					public void log(String msg) {
-						logger.debug(msg);
-					}
-				}).setClient(new OkClient(client)).build();
-
-		// Generate the token service
-		TokenService tokenService = retrofit.create(TokenService.class);
-
+		TokenService tokenService = RestfullAcessProxy.getTokenService(authority);
+		
 		try {
 			JacksonConverter c = new JacksonConverter(new ObjectMapper());
 			return (TokenResponse) c.fromBody(
