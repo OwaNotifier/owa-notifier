@@ -17,6 +17,12 @@
 			<email>mathieu.goulin@gadz.org</email>
 		</developer>
 	</developers>
+	
+	<scm>
+		<url>https://github.com/matgou/owa-notifier</url>
+		<connection>scm:git:git://github.com/matgou/owa-notifier.git</connection>
+		<developerConnection>scm:git:git@github.com:matgou/owa-notifier.git</developerConnection>
+	</scm>
 	<dependencies>
 		<!-- JUnit -->
 		<dependency>
