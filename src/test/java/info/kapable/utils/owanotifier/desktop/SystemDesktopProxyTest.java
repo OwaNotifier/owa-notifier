@@ -46,7 +46,8 @@ public class SystemDesktopProxyTest extends TestCase {
 			e.printStackTrace();
 			fail("IOException");
 		}
-		assertTrue(s.getToolTip().contains("1 message(s) non lu"));
+		String toolTip = s.getToolTip();
+		assertTrue(toolTip.contains("1 message(s) non lu"));
 
 		// Test receive a new messages
 		folder.setUnreadItemCount(2);

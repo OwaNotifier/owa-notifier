@@ -82,7 +82,11 @@ public class InboxChangeEvent {
 			return this.message.getSubject();
 		}
 		if(this.eventType == TYPE_LESS_NEW_MSG) {
-			return "Nouveaux Messages";
+			if(this.getUnreadItemCount() > 0) {
+				return this.getUnreadItemCount() + " message(s) non lu";
+			} else {
+				return "Pas de message non lu";
+			}
 		}
 		return "";
 	}

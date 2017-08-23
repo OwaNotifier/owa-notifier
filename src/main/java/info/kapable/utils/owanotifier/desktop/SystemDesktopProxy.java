@@ -153,7 +153,12 @@ public class SystemDesktopProxy extends DesktopProxy {
 		// TODO Auto-generated method stub
 		if (SystemTray.isSupported()) {
 			trayIcon.setImage(this.icon);
-			trayIcon.setToolTip(event.getUnreadItemCount() + " message(s) non lu");
+
+			if(event.getUnreadItemCount() > 0) {
+				this.setToolTip(event.getUnreadItemCount() + " message(s) non lu");
+			} else {
+				this.setToolTip("Pas de message non lu");
+			}
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
 				trayIcon.displayMessage(event.getEventTitle(), event.getEventText(), MessageType.INFO);
 			}
