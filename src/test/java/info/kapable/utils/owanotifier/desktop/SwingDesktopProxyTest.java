@@ -49,8 +49,9 @@ public class SwingDesktopProxyTest extends TestCase{
 		}
 		assertTrue(s.getNotification().getTitle().contains("Nouveaux Messages"));
 		assertTrue(s.getNotification().getSubtitle().contains("1 message(s) non lu"));
-		
+		s.setNotification(null);
 
+		// Test receive a new messages
 		folder.setUnreadItemCount(2);
 		EmailAddress emailAddress = new EmailAddress();
 		emailAddress.setAddress("foo@bar.com");
@@ -72,8 +73,19 @@ public class SwingDesktopProxyTest extends TestCase{
 		assertTrue(s.getNotification().getSubtitle().contains("BodyPreview de testUnitaire"));
 		assertTrue(s.getNotification().getFrom().contains("De: Foo Bar"));
 		assertTrue(s.getNotification().getFrom().contains("foo@bar.com"));
-		
-		
+		s.setNotification(null);
+
+		// Test mark a message as read
+		folder.setUnreadItemCount(1);
+		event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_LESS_NEW_MSG, folder.getUnreadItemCount() + " message(s) non lu");
+		try {
+			s.processEvent(event);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("IOException");
+		}
+		assertTrue(s.getNotification() == null);
+		s.setNotification(null);
 	}
 
 }

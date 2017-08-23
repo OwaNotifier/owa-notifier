@@ -54,12 +54,14 @@ public class SwingDesktopProxy extends DesktopProxy {
 				event.getEventTitle(),
 				event.getEventText(),
 				new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-		} else {
+		} else if (event.getEventType() == InboxChangeEvent.TYPE_MANY_NEW_MSG) {
 			notification = factory.buildIconNotification(
 					null,
 					event.getEventTitle(),
 					event.getEventText(),
 					new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+		} else {
+			return;
 		}
 		// Display it :
 		try {
