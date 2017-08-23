@@ -22,13 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
-import static org.junit.Assert.fail;
-import junit.framework.TestCase;
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.service.EmailAddress;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.service.Message;
 import info.kapable.utils.owanotifier.service.Recipient;
+import junit.framework.TestCase;
 
 import org.junit.Test;
 

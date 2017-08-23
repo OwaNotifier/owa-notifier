@@ -132,7 +132,7 @@ public class OwaNotifier extends Observable {
 		if(!testMode) {
 			System.exit(rc);
 		} else {
-			OwaNotifier.rc =rc;
+			OwaNotifier.rc = rc;
 		}
 		
 	}
@@ -284,5 +284,13 @@ public class OwaNotifier extends Observable {
 			}
 			lastUnreadCount = inbox.getUnreadItemCount();
 		}
+	}
+
+	/**
+	 * @return
+	 * 	The return code of application in case of exit
+	 */
+	public static int getRc() {
+		return rc;
 	}
 }
