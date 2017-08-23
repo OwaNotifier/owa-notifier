@@ -46,8 +46,6 @@ public class SwingDesktopProxy extends DesktopProxy {
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 
 		// The notification window :
-		
-		
 		if(event.getEventType() == InboxChangeEvent.TYPE_ONE_NEW_MSG) {
 			notification = factory.buildIconNotification(
 				"De: " + event.getEventFrom(),

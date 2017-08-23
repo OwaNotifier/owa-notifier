@@ -69,7 +69,8 @@ public class SystemDesktopProxy extends DesktopProxy {
 			// Let the system resizes the image if needed
 			trayIcon.setImageAutoSize(true);
 			// Set tooltip text for the tray icon
-			trayIcon.setToolTip("Notification de nouveaux courriel(s)");
+			
+			this.setToolTip("Notification de nouveaux courriel(s)");
 			trayIcon.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -97,6 +98,23 @@ public class SystemDesktopProxy extends DesktopProxy {
 			e1.printStackTrace();
 			OwaNotifier.exit(106);
 		}
+	}
+
+	/**
+	 * Update toolTipMessage
+	 * @param toolTipMessage
+	 */
+	private void setToolTip(String toolTipMessage) {
+		trayIcon.setToolTip(toolTipMessage);
+	}
+	
+	/**
+	 * Return the toolTipMessage
+	 * @return
+	 * 		A string display on tray
+	 */
+	public String getToolTip() {
+		return trayIcon.getToolTip();
 	}
 
 	private PopupMenu getPopupMenu() {
@@ -133,8 +151,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 	@Override
 	protected void processEvent(InboxChangeEvent event) throws IOException {
 		// TODO Auto-generated method stub
-		if (SystemTray.isSupported() &&
-				event.getEventType() != InboxChangeEvent.TYPE_LESS_NEW_MSG) {
+		if (SystemTray.isSupported()) {
 			trayIcon.setImage(this.icon);
 			trayIcon.setToolTip(event.getUnreadItemCount() + " message(s) non lu");
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {

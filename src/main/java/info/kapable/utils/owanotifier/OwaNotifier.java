@@ -270,7 +270,7 @@ public class OwaNotifier extends Observable {
 			logger.info("New Inbox UnreadItemCount : " + inbox.getUnreadItemCount());
 			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() > (lastUnreadCount +1)) {
 				this.setChanged();
-				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_MANY_NEW_MSG, inbox.getUnreadItemCount() + " message(s) non lu"));
+				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_MANY_NEW_MSG));
 			}
 			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() == (lastUnreadCount +1)) {
 				this.setChanged();
@@ -280,7 +280,7 @@ public class OwaNotifier extends Observable {
 			}
 			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() < lastUnreadCount) {
 				this.setChanged();
-				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_LESS_NEW_MSG, inbox.getUnreadItemCount() + " message(s) non lu"));
+				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_LESS_NEW_MSG));
 			}
 			lastUnreadCount = inbox.getUnreadItemCount();
 		}

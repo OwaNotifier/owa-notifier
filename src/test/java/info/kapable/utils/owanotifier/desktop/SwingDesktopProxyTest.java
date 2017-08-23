@@ -34,12 +34,12 @@ import org.junit.Test;
 public class SwingDesktopProxyTest extends TestCase{
 
 	@Test
-	public void test() {
+	public void testMessageReceive() {
 		SwingDesktopProxy s = new SwingDesktopProxy();
 		// Initial Notification
 		Folder folder = new Folder();
 		folder.setUnreadItemCount(1);
-		InboxChangeEvent event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_MANY_NEW_MSG, folder.getUnreadItemCount() + " message(s) non lu");
+		InboxChangeEvent event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_MANY_NEW_MSG);
 		try {
 			s.processEvent(event);
 		} catch (Exception e) {
@@ -76,7 +76,7 @@ public class SwingDesktopProxyTest extends TestCase{
 
 		// Test mark a message as read
 		folder.setUnreadItemCount(1);
-		event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_LESS_NEW_MSG, folder.getUnreadItemCount() + " message(s) non lu");
+		event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_LESS_NEW_MSG);
 		try {
 			s.processEvent(event);
 		} catch (Exception e) {
