@@ -24,9 +24,11 @@ SOFTWARE.
 
 import info.kapable.utils.owanotifier.auth.TokenService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
 import retrofit.client.Header;
 import retrofit.client.Response;
 import retrofit.mime.TypedString;
@@ -39,6 +41,7 @@ public class StubTokenService implements TokenService {
 	public String reason = "OK";
 	public String body;
 	private static StubTokenService stubTokenService;
+	public boolean retrofitError = false;
 	
 	/**
 	 * Singleton
@@ -64,7 +67,10 @@ public class StubTokenService implements TokenService {
 	public Response getAccessTokenFromAuthCode(String tenantId,
 			String clientId, String clientSecret, String grantType,
 			String code, String redirectUrl) {
-		
+		if(retrofitError) {
+			IOException e = new IOException("JUnit Stub");
+			throw RetrofitError.networkError(url, e);
+		}
 		return new Response(url, status, reason, headers, new TypedString(body));
 	}
 
@@ -72,7 +78,11 @@ public class StubTokenService implements TokenService {
 	public Response getAccessTokenFromRefreshToken(String tenantId,
 			String clientId, String clientSecret, String grantType,
 			String code, String redirectUrl) {
-		
+
+		if(retrofitError) {
+			IOException e = new IOException("JUnit Stub");
+			throw RetrofitError.networkError(url, e);
+		}
 		return new Response(url, status, reason, headers, new TypedString(body));
 	}
 

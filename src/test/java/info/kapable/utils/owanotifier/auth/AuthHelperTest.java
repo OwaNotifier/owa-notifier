@@ -39,7 +39,7 @@ public class AuthHelperTest extends TestCase {
 	}
 	
 	@Test
-	public void testGetTokenFromAuthCode() {
+	public void testGetToken() {
 		 TokenResponse t = AuthHelper.getTokenFromAuthCode("TestCase", "TestCase");
 		 assertTrue(t.getTokenType().contentEquals("Bearer"));
 		 Calendar now = Calendar.getInstance();
@@ -49,5 +49,15 @@ public class AuthHelperTest extends TestCase {
 		 t = AuthHelper.getTokenFromRefresh(t, "TestCase");
 		 assertTrue(t.getTokenType().contentEquals("Bearer"));
 		 assertTrue(t.getExpirationTime().after(now.getTime()));	 
+	}
+	
+	@Test
+	public void testGetTokenWithException() {
+		StubTokenService.getStubTokenService().retrofitError=true;
+		TokenResponse t = AuthHelper.getTokenFromAuthCode("TestCase", "TestCase");
+		assertTrue(t.getError().length() > 0);
+		
+		t = AuthHelper.getTokenFromRefresh(t, "TestCase");
+		assertTrue(t.getError().length() > 0);
 	}
 }
