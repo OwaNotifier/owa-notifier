@@ -50,6 +50,8 @@ import org.slf4j.LoggerFactory;
 public class SystemDesktopProxy extends DesktopProxy {
 
 	private TrayIcon trayIcon;
+
+	private String toolTip;
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(SystemDesktopProxy.class);
@@ -87,6 +89,8 @@ public class SystemDesktopProxy extends DesktopProxy {
 				}
 			});
 			trayIcon.setPopupMenu(this.getPopupMenu());
+		} catch (UnsupportedOperationException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 			OwaNotifier.exit(105);
@@ -108,6 +112,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 	 * @param toolTipMessage
 	 */
 	private void setToolTip(String toolTipMessage) {
+		this.toolTip = toolTipMessage;
 		trayIcon.setToolTip(toolTipMessage);
 	}
 	
@@ -117,7 +122,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 	 * 		A string display on tray
 	 */
 	public String getToolTip() {
-		return trayIcon.getToolTip();
+		return this.toolTip;
 	}
 
 	private PopupMenu getPopupMenu() {
