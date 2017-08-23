@@ -1,23 +1,18 @@
 package info.kapable.utils.owanotifier;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
+import info.kapable.utils.owanotifier.teststubs.StubTokenService;
+import info.kapable.utils.owanotifier.utils.HTTPBasicClient;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.UUID;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
-
-import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
-import info.kapable.utils.owanotifier.teststubs.StubTokenService;
-import info.kapable.utils.owanotifier.utils.HTTPBasicClient;
 
 public class WebserverClientHandlerTest extends TestCase {
 	
