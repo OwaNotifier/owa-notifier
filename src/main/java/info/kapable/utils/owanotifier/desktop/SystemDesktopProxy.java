@@ -113,7 +113,9 @@ public class SystemDesktopProxy extends DesktopProxy {
 	 */
 	private void setToolTip(String toolTipMessage) {
 		this.toolTip = toolTipMessage;
-		trayIcon.setToolTip(toolTipMessage);
+		if(trayIcon != null) {
+			trayIcon.setToolTip(toolTipMessage);
+		}
 	}
 	
 	/**
