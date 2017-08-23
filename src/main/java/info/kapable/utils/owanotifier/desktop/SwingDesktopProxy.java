@@ -79,11 +79,4 @@ public class SwingDesktopProxy extends DesktopProxy {
 	public IconNotification getNotification() {
 		return notification;
 	}
-
-	/**
-	 * @param notification the notification to set
-	 */
-	public void setNotification(IconNotification notification) {
-		this.notification = notification;
-	}
 }
