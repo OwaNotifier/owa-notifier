@@ -49,8 +49,6 @@ public class InboxChangeEvent {
 	 * 		  The inbox object associated to event
 	 * @param eventType
 	 * 		  The type of event object associated to event
-	 * @param eventText
-	 * 		  Short description of event
 	 */
 	public InboxChangeEvent(Folder inbox, int eventType) {
 		this.inbox = inbox;
@@ -113,6 +111,7 @@ public class InboxChangeEvent {
 	/**
 	 * Return mail message
 	 * @return
+	 * 	the mail message
 	 */
 	public Message getMessage() {
 		return message;
@@ -121,6 +120,7 @@ public class InboxChangeEvent {
 	/**
 	 * Update mail message
 	 * @param message
+	 * 	the mail message
 	 */
 	public void setMessage(Message message) {
 		this.message = message;
@@ -138,6 +138,7 @@ public class InboxChangeEvent {
 	/**
 	 * Set the event type
 	 * @param eventType
+	 * 	the event type
 	 */
 	public void setEventType(int eventType) {
 		this.eventType = eventType;
@@ -181,6 +182,7 @@ public class InboxChangeEvent {
 	/**
 	 * Return the unread message count
 	 * @return
+	 * 		return the unread message count 
 	 */
 	public int getUnreadItemCount() {
 		return inbox.getUnreadItemCount();
