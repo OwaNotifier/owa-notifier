@@ -24,6 +24,7 @@ SOFTWARE.
 
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.notification.manager.SimpleManager;
 import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
 import info.kapable.utils.owanotifier.utils.Time;
 
@@ -34,7 +35,6 @@ import javax.swing.ImageIcon;
 
 import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
-import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
 
 public class SwingDesktopProxy extends DesktopProxy {
