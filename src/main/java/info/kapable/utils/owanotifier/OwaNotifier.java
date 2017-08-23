@@ -62,7 +62,7 @@ import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
  *  - start oauth2 client daemon
  *  - main loop to check new mail
  * 
- * @author Mathieu GOULIN <mathieu.goulin@gadz.org>
+ * @author Mathieu GOULIN
  */
 public class OwaNotifier extends Observable {
 	// testMode is true when using this class on jUnit context
@@ -97,7 +97,9 @@ public class OwaNotifier extends Observable {
 	/**
 	 * return properties
 	 * @return
+	 * 		Return application properties
 	 * @throws IOException
+	 * 		In case of exception during loading properties
 	 */
 	public static Properties getProps() throws IOException {
 		if(OwaNotifier.props == null) {
@@ -131,10 +133,11 @@ public class OwaNotifier extends Observable {
 	/**
 	 * Main function swith from static domain to object
 	 * @param args
+	 * 		Arguments passed to application
 	 * @throws IOException
-	 * @throws URISyntaxException
+	 * 		In case of exception during configuration loading
 	 */
-	public static void main(String[] args) throws IOException, URISyntaxException {
+	public static void main(String[] args) throws IOException {
 		OwaNotifier on = new OwaNotifier();
 		loadConfig();
 		on.boot();
@@ -232,9 +235,13 @@ public class OwaNotifier extends Observable {
 	 * Loop until end to get unread mail count
 	 * 
 	 * @throws JsonParseException
+	 * 		In case of bad response fron api
 	 * @throws JsonMappingException
+	 * 		In case of bad response fron api
 	 * @throws IOException
+	 * 		In case of exception during api call
 	 * @throws InterruptedException
+	 * 		In case of interupt
 	 */
 	public void infiniteLoop() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
 		int lastUnreadCount = 0;

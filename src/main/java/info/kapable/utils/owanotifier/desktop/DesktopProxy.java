@@ -83,7 +83,9 @@ public abstract class DesktopProxy implements Observer {
 	 * This function is call web event is throw 
 	 * Display notification on destop
 	 * @param event
+	 * 			The event to display
 	 * @throws IOException
+	 * 		In case of exception during event processing
 	 */
 	protected abstract void processEvent(InboxChangeEvent event) throws IOException;
 	

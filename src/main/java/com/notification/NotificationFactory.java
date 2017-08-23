@@ -165,11 +165,12 @@ public final class NotificationFactory {
 	/**
 	 * Builds an IconNotification.
 	 *
+	 * @param from
+	 * 			  the from field to display
 	 * @param title
 	 *            the title to display on the IconNotification
 	 * @param subtitle
 	 *            the subtitle to display on the IconNotification
-	 * @param message 
 	 * @param icon
 	 *            the icon on the IconNotification
 	 * @return the built IconNotification

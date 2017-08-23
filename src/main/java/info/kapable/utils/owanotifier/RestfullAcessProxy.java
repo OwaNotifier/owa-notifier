@@ -19,7 +19,7 @@ import info.kapable.utils.owanotifier.teststubs.StubTokenService;
 /**
  * A proxy class to access to retrofit service
  * 
- * @author Mathieu GOULIN <mathieu.goulin@gadz.org>
+ * @author Mathieu GOULIN
  */
 public class RestfullAcessProxy {
 	// The logger
@@ -32,7 +32,9 @@ public class RestfullAcessProxy {
      * Return a instance of tokenService to call it
      * 
      * @param authority
-     * @return TokenService return a proxy to call api
+     * 		The url to login
+     * @return TokenService 
+     * 		return a proxy to call api
      */
 	public static TokenService getTokenService(String authority) {
 		if(!stubMode) {
@@ -47,6 +49,7 @@ public class RestfullAcessProxy {
 	 * On jUnit context return a stub to simulate rest TokenService
 	 * 
 	 * @return TokenService
+	 * 		The service to use to call api
 	 */
 	private static TokenService getStubTokenService() {
 		return StubTokenService.getStubTokenService();

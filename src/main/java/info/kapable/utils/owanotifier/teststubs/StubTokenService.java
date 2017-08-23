@@ -19,6 +19,8 @@ public class StubTokenService implements TokenService {
 	
 	/**
 	 * Singleton
+	 * @return
+	 * 		The singleton object
 	 */
 	public static StubTokenService getStubTokenService() {
 		if(stubTokenService == null) {
