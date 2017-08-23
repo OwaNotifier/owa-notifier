@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier;
 
+import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.teststubs.StubTokenService;
 import info.kapable.utils.owanotifier.utils.HTTPBasicClient;
@@ -106,10 +107,12 @@ public class WebserverClientHandlerTest extends TestCase {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet(8081, "https://outlook.office.com/owa/");
+		TokenResponse t = doGet(8081, "https://outlook.office.com/owa/");
+		assertTrue(t.getError() == null);
+		assertTrue(t.getAccessToken().length() > 0);
 	}
 	
-	private void doGet(int listenPort, String verifString) {
+	private TokenResponse doGet(int listenPort, String verifString) {
 		try {
 			ServerSocket serverSocket = null;
 			// Search an available port
@@ -144,10 +147,12 @@ public class WebserverClientHandlerTest extends TestCase {
 				e.printStackTrace();
 			}
 			assertTrue(client.output.contains(verifString));
+			return c.tokenResponse;
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
+		return null;
 	}
 
 }
