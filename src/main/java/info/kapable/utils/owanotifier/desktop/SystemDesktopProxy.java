@@ -59,11 +59,8 @@ public class SystemDesktopProxy extends DesktopProxy {
 	 */
 	public SystemDesktopProxy() {
 		super();
+
 		try {
-			SystemTray tray = SystemTray.getSystemTray();
-
-
-			// If the icon is a file
 			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
 			trayIcon = new TrayIcon(image, "Emails");
 			// Let the system resizes the image if needed
@@ -90,10 +87,16 @@ public class SystemDesktopProxy extends DesktopProxy {
 				}
 			});
 			trayIcon.setPopupMenu(this.getPopupMenu());
-			tray.add(trayIcon);
 		} catch (IOException e) {
 			e.printStackTrace();
 			OwaNotifier.exit(105);
+		}
+
+		try {
+			SystemTray tray = SystemTray.getSystemTray();
+			tray.add(trayIcon);
+		} catch (UnsupportedOperationException e) {
+			e.printStackTrace();
 		} catch (AWTException e1) {
 			e1.printStackTrace();
 			OwaNotifier.exit(106);
