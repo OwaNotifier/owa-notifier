@@ -137,6 +137,9 @@ public class TextNotification extends BorderLayoutNotification {
 		} else {
 			m_fromLabel.setText(string);
 		}
-		
+	}
+
+	public String getFrom() {
+		return m_fromLabel.getText();
 	}
 }

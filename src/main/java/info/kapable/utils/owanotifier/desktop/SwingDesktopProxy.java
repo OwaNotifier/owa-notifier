@@ -38,7 +38,8 @@ import com.notification.NotificationFactory.Location;
 import com.notification.types.IconNotification;
 
 public class SwingDesktopProxy extends DesktopProxy {
-
+	IconNotification notification;
+	
 	@Override
 	protected void processEvent(InboxChangeEvent event) throws IOException {
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
@@ -46,15 +47,15 @@ public class SwingDesktopProxy extends DesktopProxy {
 
 		// The notification window :
 		
-		IconNotification icon;
+		
 		if(event.getEventType() == InboxChangeEvent.TYPE_ONE_NEW_MSG) {
-			icon = factory.buildIconNotification(
+			notification = factory.buildIconNotification(
 				"De: " + event.getEventFrom(),
 				event.getEventTitle(),
 				event.getEventText(),
 				new ImageIcon(this.icon.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
 		} else {
-			icon = factory.buildIconNotification(
+			notification = factory.buildIconNotification(
 					null,
 					event.getEventTitle(),
 					event.getEventText(),
@@ -62,15 +63,25 @@ public class SwingDesktopProxy extends DesktopProxy {
 		}
 		// Display it :
 		try {
-			fade.addNotification(icon, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
+			fade.addNotification(notification, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
+	/**
+	 * @return the notification
+	 */
+	public IconNotification getNotification() {
+		return notification;
+	}
+
+	/**
+	 * @param notification the notification to set
+	 */
+	public void setNotification(IconNotification notification) {
+		this.notification = notification;
+	}
 }

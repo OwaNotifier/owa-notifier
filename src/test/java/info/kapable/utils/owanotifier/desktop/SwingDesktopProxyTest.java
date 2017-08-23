@@ -23,26 +23,57 @@ SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
 import static org.junit.Assert.fail;
+import junit.framework.TestCase;
 import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.service.EmailAddress;
 import info.kapable.utils.owanotifier.service.Folder;
+import info.kapable.utils.owanotifier.service.Message;
+import info.kapable.utils.owanotifier.service.Recipient;
 
 import org.junit.Test;
 
-public class SwingDesktopProxyTest {
+public class SwingDesktopProxyTest extends TestCase{
 
 	@Test
 	public void test() {
 		SwingDesktopProxy s = new SwingDesktopProxy();
-		
+		// Initial Notification
 		Folder folder = new Folder();
-		InboxChangeEvent event = new InboxChangeEvent(folder , 1, "hello world");
+		folder.setUnreadItemCount(1);
+		InboxChangeEvent event = new InboxChangeEvent(folder , InboxChangeEvent.TYPE_MANY_NEW_MSG, folder.getUnreadItemCount() + " message(s) non lu");
 		try {
 			s.processEvent(event);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("IOException");
 		}
+		assertTrue(s.getNotification().getTitle().contains("Nouveaux Messages"));
+		assertTrue(s.getNotification().getSubtitle().contains("1 message(s) non lu"));
+		
+
+		folder.setUnreadItemCount(2);
+		EmailAddress emailAddress = new EmailAddress();
+		emailAddress.setAddress("foo@bar.com");
+		emailAddress.setName("Foo Bar");
+		Message message = new Message();
+		Recipient from = new Recipient();
+		from.setEmailAddress(emailAddress);
+		message.setBodyPreview("BodyPreview de testUnitaire");
+		message.setFrom(from);
+		message.setSubject("Subject de Junit");
+		event = new InboxChangeEvent(folder , message);
+		try {
+			s.processEvent(event);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("IOException");
+		}
+		assertTrue(s.getNotification().getTitle().contains("Subject de Junit"));
+		assertTrue(s.getNotification().getSubtitle().contains("BodyPreview de testUnitaire"));
+		assertTrue(s.getNotification().getFrom().contains("De: Foo Bar"));
+		assertTrue(s.getNotification().getFrom().contains("foo@bar.com"));
+		
+		
 	}
 
 }
