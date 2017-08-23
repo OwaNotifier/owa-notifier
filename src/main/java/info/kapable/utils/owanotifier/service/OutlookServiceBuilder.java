@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.squareup.okhttp.OkHttpClient;
 
 import info.kapable.utils.owanotifier.OwaNotifier;
-import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.LogLevel;

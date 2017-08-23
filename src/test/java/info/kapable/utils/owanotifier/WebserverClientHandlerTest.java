@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.teststubs.StubTokenService;
+import info.kapable.utils.owanotifier.utils.HTTPBasicClient;
 
 public class WebserverClientHandlerTest extends TestCase {
 	
@@ -54,7 +55,7 @@ public class WebserverClientHandlerTest extends TestCase {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet(8080);
+		doGet(8080, " close_window();");
 	}
 	
 	@Test
@@ -71,7 +72,7 @@ public class WebserverClientHandlerTest extends TestCase {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet(8081);
+		doGet(8081, "https://outlook.office.com/owa/");
 	}
 	
 	@Test
@@ -88,10 +89,10 @@ public class WebserverClientHandlerTest extends TestCase {
 			e.printStackTrace();
 			assertTrue(false);
 		}
-		doGet(8081);
+		doGet(8081, "https://outlook.office.com/owa/");
 	}
 	
-	private void doGet(int listenPort) {
+	private void doGet(int listenPort, String verifString) {
 		try {
 			ServerSocket serverSocket = null;
 			// Search an available port
@@ -103,30 +104,7 @@ public class WebserverClientHandlerTest extends TestCase {
 					OwaNotifier.setProps("listenPort", listenPort + "");
 				}
 			}
-			final int listenPortFinal = listenPort;
-			Thread client = new Thread() {
-				public void run() {
-			         try {
-			        	try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						Socket client = new Socket("localhost", listenPortFinal);
-						BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-								client.getOutputStream()));
-						BufferedReader in = new BufferedReader(new InputStreamReader(
-								client.getInputStream()));
-						out.write(payloadQuery);
-						out.close();
-						
-					} catch (UnknownHostException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			};	
+			HTTPBasicClient client = new HTTPBasicClient(payloadQuery, "localhost", listenPort);
 			client.start();
 			Socket s = serverSocket.accept();
 			UUID nonce = UUID.randomUUID();
@@ -142,6 +120,13 @@ public class WebserverClientHandlerTest extends TestCase {
 			assertTrue(c.idTokenObj != null);
 			s.close();
 			serverSocket.close();
+			try {
+				client.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			assertTrue(client.output.contains(verifString));
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
