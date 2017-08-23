@@ -51,7 +51,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 
 	private TrayIcon trayIcon;
 
-	private String toolTip;
+	private String toolTip = "Notification de nouveaux courriel(s)";
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(SystemDesktopProxy.class);
@@ -69,7 +69,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 			trayIcon.setImageAutoSize(true);
 			// Set tooltip text for the tray icon
 			
-			this.setToolTip("Notification de nouveaux courriel(s)");
+			this.setToolTip(toolTip);
 			trayIcon.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -162,17 +162,16 @@ public class SystemDesktopProxy extends DesktopProxy {
 		if (SystemTray.isSupported()) {
 			trayIcon.setImage(this.icon);
 
-			if(event.getUnreadItemCount() > 0) {
-				this.setToolTip(event.getUnreadItemCount() + " message(s) non lu");
-			} else {
-				this.setToolTip("Pas de message non lu");
-			}
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
 				trayIcon.displayMessage(event.getEventTitle(), event.getEventText(), MessageType.INFO);
 			}
 		} else {
 			logger.error("System tray not supported!");
 		}
-		
+		if(event.getUnreadItemCount() > 0) {
+			this.setToolTip(event.getUnreadItemCount() + " message(s) non lu");
+		} else {
+			this.setToolTip("Pas de message non lu");
+		}
 	}
 }
