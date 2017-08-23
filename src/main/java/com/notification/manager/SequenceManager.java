@@ -1,5 +1,7 @@
 package com.notification.manager;
 
+import info.kapable.utils.owanotifier.utils.Time;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +9,6 @@ import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
 import com.notification.NotificationListener;
 import com.notification.types.WindowNotification;
-
-import info.kapable.utils.owanotifier.utils.Time;
 
 /**
  * Displays Notifications one after another in a certain location. As soon as the current Notification is hidden, a new

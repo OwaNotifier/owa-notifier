@@ -1,9 +1,10 @@
 package info.kapable.utils.owanotifier.utils;
 
-import com.notification.types.ProgressBarNotification;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import com.notification.types.ProgressBarNotification;
 
 public class ProgressBarNotificationTest {
 	@Test

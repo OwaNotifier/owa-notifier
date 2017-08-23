@@ -1,10 +1,10 @@
 package com.notification;
 
+import info.kapable.utils.owanotifier.utils.Time;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
-
-import info.kapable.utils.owanotifier.utils.Time;
 
 /**
  * Manages the creation and movement of Notifications. Once a Notification is added, all aspects of it except for click

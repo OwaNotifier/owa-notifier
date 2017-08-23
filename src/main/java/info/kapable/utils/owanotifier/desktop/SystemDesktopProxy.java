@@ -1,5 +1,8 @@
 package info.kapable.utils.owanotifier.desktop;
 
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -21,9 +24,6 @@ import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import info.kapable.utils.owanotifier.InboxChangeEvent;
-import info.kapable.utils.owanotifier.OwaNotifier;
 
 public class SystemDesktopProxy extends DesktopProxy {
 

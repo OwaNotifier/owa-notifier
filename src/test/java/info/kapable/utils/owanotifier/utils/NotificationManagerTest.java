@@ -8,8 +8,6 @@ import com.notification.Notification;
 import com.notification.NotificationManager;
 import com.notification.types.TextNotification;
 
-import info.kapable.utils.owanotifier.utils.Time;
-
 public class NotificationManagerTest {
 	@Test
 	public void addAndRemoveShouldTriggerChildCalls() {

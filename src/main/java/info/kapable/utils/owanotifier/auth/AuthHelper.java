@@ -28,19 +28,12 @@ import info.kapable.utils.owanotifier.OwaNotifier;
 import info.kapable.utils.owanotifier.RestfullAcessProxy;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 
 public class AuthHelper {
 	private static final String authority = "https://login.microsoftonline.com";

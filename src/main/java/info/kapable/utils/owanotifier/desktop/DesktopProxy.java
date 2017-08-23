@@ -25,43 +25,20 @@ package info.kapable.utils.owanotifier.desktop;
 
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.OwaNotifier;
-import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
-import info.kapable.utils.owanotifier.service.Folder;
-import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
-import info.kapable.utils.owanotifier.utils.Time;
 
-import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.notification.NotificationFactory;
-import com.notification.NotificationFactory.Location;
-import com.notification.manager.SimpleManager;
-import com.notification.types.IconNotification;
 
 public abstract class DesktopProxy implements Observer {
 

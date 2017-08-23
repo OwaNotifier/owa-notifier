@@ -3,6 +3,7 @@ package info.kapable.utils.owanotifier.utils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -16,8 +17,6 @@ import com.notification.Notification;
 import com.notification.NotificationListener;
 import com.notification.types.TextNotification;
 import com.notification.types.WindowNotification;
-
-import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 public class WindowNotificationTest {
 	/*@Test

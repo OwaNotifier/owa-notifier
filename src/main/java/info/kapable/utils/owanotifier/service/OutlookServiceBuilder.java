@@ -1,5 +1,7 @@
 package info.kapable.utils.owanotifier.service;
 
+import info.kapable.utils.owanotifier.OwaNotifier;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -8,13 +10,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.squareup.okhttp.OkHttpClient;
-
-import info.kapable.utils.owanotifier.OwaNotifier;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
+
+import com.squareup.okhttp.OkHttpClient;
 
 public class OutlookServiceBuilder {
 	

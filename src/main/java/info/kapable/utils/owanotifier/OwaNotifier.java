@@ -23,6 +23,19 @@ SOFTWARE.
  */
 package info.kapable.utils.owanotifier;
 
+import info.kapable.utils.owanotifier.auth.AuthHelper;
+import info.kapable.utils.owanotifier.auth.IdToken;
+import info.kapable.utils.owanotifier.auth.TokenResponse;
+import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
+import info.kapable.utils.owanotifier.desktop.DesktopProxy;
+import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
+import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
+import info.kapable.utils.owanotifier.service.Folder;
+import info.kapable.utils.owanotifier.service.Message;
+import info.kapable.utils.owanotifier.service.MessageCollection;
+import info.kapable.utils.owanotifier.service.OutlookService;
+import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +43,6 @@ import java.net.BindException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Observable;
 import java.util.Properties;
@@ -42,19 +54,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import info.kapable.utils.owanotifier.auth.AuthHelper;
-import info.kapable.utils.owanotifier.auth.IdToken;
-import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
-import info.kapable.utils.owanotifier.auth.TokenResponse;
-import info.kapable.utils.owanotifier.desktop.DesktopProxy;
-import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
-import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
-import info.kapable.utils.owanotifier.service.Folder;
-import info.kapable.utils.owanotifier.service.Message;
-import info.kapable.utils.owanotifier.service.MessageCollection;
-import info.kapable.utils.owanotifier.service.OutlookService;
-import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
 
 /**
  * OwaNotifier main class

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import info.kapable.utils.owanotifier.utils.MathUtils;
-
 public class MathUtilsTest {
 	@Test
 	public void testSignNegative() {

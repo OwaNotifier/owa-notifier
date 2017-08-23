@@ -1,6 +1,6 @@
 package info.kapable.utils.owanotifier.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 

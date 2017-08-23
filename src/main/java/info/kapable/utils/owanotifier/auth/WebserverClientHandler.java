@@ -23,6 +23,8 @@ SOFTWARE.
  */
 package info.kapable.utils.owanotifier.auth;
 
+import info.kapable.utils.owanotifier.OwaNotifier;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -32,8 +34,6 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import info.kapable.utils.owanotifier.OwaNotifier;
 
 public class WebserverClientHandler extends Thread {
 	private Socket socket; // The accepted socket from the Webserver

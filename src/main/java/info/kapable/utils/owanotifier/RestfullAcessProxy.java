@@ -1,5 +1,8 @@
 package info.kapable.utils.owanotifier;
 
+import info.kapable.utils.owanotifier.auth.TokenService;
+import info.kapable.utils.owanotifier.teststubs.StubTokenService;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -12,9 +15,6 @@ import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 
 import com.squareup.okhttp.OkHttpClient;
-
-import info.kapable.utils.owanotifier.auth.TokenService;
-import info.kapable.utils.owanotifier.teststubs.StubTokenService;
 
 /**
  * A proxy class to access to retrofit service

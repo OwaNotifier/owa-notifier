@@ -1,5 +1,10 @@
 package info.kapable.utils.owanotifier.desktop;
 
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
+import info.kapable.utils.owanotifier.utils.Time;
+
 import java.awt.Image;
 import java.io.IOException;
 
@@ -9,11 +14,6 @@ import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
-
-import info.kapable.utils.owanotifier.InboxChangeEvent;
-import info.kapable.utils.owanotifier.OwaNotifier;
-import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
-import info.kapable.utils.owanotifier.utils.Time;
 
 public class SwingDesktopProxy extends DesktopProxy {
 

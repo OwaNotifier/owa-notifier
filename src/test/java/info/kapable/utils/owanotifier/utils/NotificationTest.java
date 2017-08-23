@@ -1,10 +1,11 @@
 package info.kapable.utils.owanotifier.utils;
 
+import static org.junit.Assert.assertFalse;
+
+import org.junit.Test;
+
 import com.notification.Notification;
 import com.notification.types.TextNotification;
-
-import static org.junit.Assert.*;
-import org.junit.Test;
 
 public class NotificationTest {
 	@Test

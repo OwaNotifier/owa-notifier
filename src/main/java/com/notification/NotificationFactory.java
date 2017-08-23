@@ -1,5 +1,11 @@
 package com.notification;
 
+import info.kapable.utils.owanotifier.exception.NotificationException;
+import info.kapable.utils.owanotifier.theme.TextTheme;
+import info.kapable.utils.owanotifier.theme.ThemePackage;
+import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
+
 import java.util.HashMap;
 
 import javax.swing.Icon;
@@ -9,12 +15,6 @@ import com.notification.types.AcceptNotification;
 import com.notification.types.IconNotification;
 import com.notification.types.ProgressBarNotification;
 import com.notification.types.TextNotification;
-
-import info.kapable.utils.owanotifier.exception.NotificationException;
-import info.kapable.utils.owanotifier.theme.TextTheme;
-import info.kapable.utils.owanotifier.theme.ThemePackage;
-import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
-import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * Creates Notifications using a ThemePackage. It is possible to add custom Notifications by adding

@@ -1,11 +1,12 @@
 package info.kapable.utils.owanotifier.teststubs;
 
+import info.kapable.utils.owanotifier.auth.TokenService;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.client.Response;
-import info.kapable.utils.owanotifier.auth.TokenService;
 import retrofit.client.Header;
+import retrofit.client.Response;
 import retrofit.mime.TypedString;
 
 public class StubTokenService implements TokenService {

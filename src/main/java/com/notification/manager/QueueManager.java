@@ -1,5 +1,7 @@
 package com.notification.manager;
 
+import info.kapable.utils.owanotifier.utils.MathUtils;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -8,8 +10,6 @@ import javax.swing.Timer;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
-
-import info.kapable.utils.owanotifier.utils.MathUtils;
 
 /**
  * A NotificationManager which slides old Notifications above or below new Notifications.

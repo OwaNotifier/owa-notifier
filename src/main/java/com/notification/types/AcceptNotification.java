@@ -1,5 +1,8 @@
 package com.notification.types;
 
+import info.kapable.utils.owanotifier.theme.TextTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -7,9 +10,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import info.kapable.utils.owanotifier.theme.TextTheme;
-import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * This is a Notification that will ask the user to accept of decline a certain action.

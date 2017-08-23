@@ -1,14 +1,13 @@
 package com.notification.manager;
 
+import info.kapable.utils.owanotifier.utils.Screen;
+import info.kapable.utils.owanotifier.utils.Time;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
-
-import info.kapable.utils.owanotifier.utils.Screen;
-import info.kapable.utils.owanotifier.utils.Time;
-
 import com.notification.NotificationManager;
 
 /**

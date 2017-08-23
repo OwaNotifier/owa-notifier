@@ -1,13 +1,10 @@
 package info.kapable.utils.owanotifier.desktop;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-import org.junit.Test;
-
+import static org.junit.Assert.fail;
 import info.kapable.utils.owanotifier.InboxChangeEvent;
 import info.kapable.utils.owanotifier.service.Folder;
+
+import org.junit.Test;
 
 public class SystemDesktopProxyTest {
 
