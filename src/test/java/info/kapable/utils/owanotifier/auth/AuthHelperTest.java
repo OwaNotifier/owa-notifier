@@ -59,5 +59,6 @@ public class AuthHelperTest extends TestCase {
 		
 		t = AuthHelper.getTokenFromRefresh(t, "TestCase");
 		assertTrue(t.getError().length() > 0);
+		StubTokenService.getStubTokenService().retrofitError=false;
 	}
 }

@@ -66,6 +66,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OwaNotifier extends Observable {
 	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
+	// the return code for exit
+	private static int rc;
+	
 	// props contains application configuration
 	public static Properties props;
 	
@@ -75,8 +78,7 @@ public class OwaNotifier extends Observable {
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(OwaNotifier.class);
-
-    
+        
 	/**
 	 * Load config from properties in ressource
 	 * @throws IOException
@@ -127,7 +129,12 @@ public class OwaNotifier extends Observable {
 	 */
 	public static void exit(int rc) {
 		logger.info("Exit with code : " + rc);
-		System.exit(rc);
+		if(!testMode) {
+			System.exit(rc);
+		} else {
+			OwaNotifier.rc =rc;
+		}
+		
 	}
 	/**
 	 * Main function swith from static domain to object
