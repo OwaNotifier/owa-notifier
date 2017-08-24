@@ -218,6 +218,7 @@ public class OwaNotifier extends Observable {
 			// Wait for a client to connect
 			Socket s = serverSocket.accept(); 
 			WebserverClientHandler c = new WebserverClientHandler(s, nonce.toString()); // Handle the client in a separate thread
+			c.join();
 			// Wait return of webserver
 			Socket s2 = serverSocket.accept(); 
 			WebserverClientHandler c2 = new WebserverClientHandler(s2, nonce.toString()); // Handle the client in a separate thread

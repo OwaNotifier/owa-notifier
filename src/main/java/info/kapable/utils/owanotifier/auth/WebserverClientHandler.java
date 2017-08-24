@@ -63,8 +63,8 @@ public class WebserverClientHandler extends Thread {
 	 */
 	private String readFileAsString(String fileName) throws IOException {
         StringBuffer fileData = new StringBuffer();
-        BufferedReader reader = new BufferedReader(
-                new FileReader(getClass().getClassLoader().getResource(fileName).getPath()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                this.getClass().getResourceAsStream("/" + fileName)));
         char[] buf = new char[1024];
         int numRead=0;
         while((numRead=reader.read(buf)) != -1){
