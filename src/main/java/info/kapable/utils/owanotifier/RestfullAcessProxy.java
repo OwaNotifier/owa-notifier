@@ -205,8 +205,13 @@ public class RestfullAcessProxy {
 	}
 
 	/**
-	 * @return 
-	 * 	an instance of outlook service
+	 * Return current context OutlookService 
+	 * @param accessTokenSource
+	 * 		The access token
+	 * @param userEmailSource
+	 * 		The user email if know
+	 * @return
+	 * 		an instance of outlook service
 	 */
 	public static OutlookService getOutlookService(String accessTokenSource, String userEmailSource) {
 		return getRealOutlookService(accessTokenSource,userEmailSource);
