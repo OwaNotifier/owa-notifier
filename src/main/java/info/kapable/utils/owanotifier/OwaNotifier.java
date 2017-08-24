@@ -219,17 +219,21 @@ public class OwaNotifier extends Observable {
 			Socket s = serverSocket.accept(); 
 			WebserverClientHandler c = new WebserverClientHandler(s, nonce.toString()); // Handle the client in a separate thread
 			// Wait return of webserver
-			c.join();
+			Socket s2 = serverSocket.accept(); 
+			WebserverClientHandler c2 = new WebserverClientHandler(s2, nonce.toString()); // Handle the client in a separate thread
+			
+			c2.join();
 			s.close();
+			s2.close();
 			serverSocket.close();
 			
 			// Save tokenResponse in case of success
-			if(c.tokenResponse == null) {
+			if(c2.tokenResponse == null) {
 				logger.error("No token, error");
 				OwaNotifier.exit(5);
 			} else {
-				this.tokenResponse = c.tokenResponse;
-				this.idToken = c.idTokenObj;
+				this.tokenResponse = c2.tokenResponse;
+				this.idToken = c2.idTokenObj;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -250,7 +254,7 @@ public class OwaNotifier extends Observable {
 	 * 		In case of interupt
 	 */
 	public void infiniteLoop() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
-		int lastUnreadCount = 0;
+		int lastUnreadCount = -1;
 		String folder = "inbox";
 		JacksonConverter c = new JacksonConverter(new ObjectMapper());
 		OutlookService outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);
@@ -268,6 +272,13 @@ public class OwaNotifier extends Observable {
 			// Retrieve messages from the inbox
 			Folder inbox = (Folder) c.fromBody(outlookService.getFolder(folder).getBody(), Folder.class);
 			logger.info("New Inbox UnreadItemCount : " + inbox.getUnreadItemCount());
+
+			// First loop iteration change notification icon to no mail
+			if(lastUnreadCount <= 0) {
+				this.setChanged();
+				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_LESS_NEW_MSG));
+			}
+			
 			if (inbox.getUnreadItemCount() > 0 &&  inbox.getUnreadItemCount() > (lastUnreadCount +1)) {
 				this.setChanged();
 				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_MANY_NEW_MSG));

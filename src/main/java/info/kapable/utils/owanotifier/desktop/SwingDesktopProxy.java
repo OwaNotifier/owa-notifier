@@ -29,8 +29,10 @@ import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
 import info.kapable.utils.owanotifier.utils.Time;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import com.notification.NotificationFactory;
@@ -39,7 +41,18 @@ import com.notification.types.IconNotification;
 
 public class SwingDesktopProxy extends DesktopProxy {
 	IconNotification notification;
-	
+	private Image icon;
+
+	public SwingDesktopProxy() {
+		super();
+		try {
+			this.icon = ImageIO.read(getClass().getClassLoader().getResource("icon.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	protected void processEvent(InboxChangeEvent event) throws IOException {
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);

@@ -37,6 +37,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -52,6 +53,9 @@ public class SystemDesktopProxy extends DesktopProxy {
 	private TrayIcon trayIcon;
 
 	private String toolTip = "Notification de nouveaux courriel(s)";
+	private Image imageWaiting;
+	private Image imageNewMail;
+	private Image imageNoMail;
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(SystemDesktopProxy.class);
@@ -63,8 +67,10 @@ public class SystemDesktopProxy extends DesktopProxy {
 		super();
 
 		try {
-			Image image = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
-			trayIcon = new TrayIcon(image, "Emails");
+			this.imageWaiting = ImageIO.read(getClass().getClassLoader().getResource("icon-waiting.png"));
+			this.imageNewMail = ImageIO.read(getClass().getClassLoader().getResource("icon.png"));
+			this.imageNoMail = ImageIO.read(getClass().getClassLoader().getResource("icon-no-mail.png"));
+			trayIcon = new TrayIcon(imageWaiting, "Emails");
 			// Let the system resizes the image if needed
 			trayIcon.setImageAutoSize(true);
 			// Set tooltip text for the tray icon
@@ -162,7 +168,11 @@ public class SystemDesktopProxy extends DesktopProxy {
 	protected void processEvent(InboxChangeEvent event) throws IOException {
 		// TODO Auto-generated method stub
 		if (SystemTray.isSupported()) {
-			trayIcon.setImage(this.icon);
+			if(event.getUnreadItemCount() > 0) {
+				trayIcon.setImage(this.imageNewMail);
+			} else {
+				trayIcon.setImage(this.imageNoMail);
+			}
 
 			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
 				trayIcon.displayMessage(event.getEventTitle(), event.getEventText(), MessageType.INFO);

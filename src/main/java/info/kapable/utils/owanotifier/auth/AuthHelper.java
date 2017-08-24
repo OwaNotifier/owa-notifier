@@ -151,7 +151,8 @@ public class AuthHelper {
 		urlBuilder.append("&scope=" + getScopes().replaceAll(" ", "%20"));
 		urlBuilder.append("&state=" + state);
 		urlBuilder.append("&nonce=" + nonce);
-		urlBuilder.append("&response_mode=" + "form_post");
+		// Response mode is
+		//urlBuilder.append("&response_mode=" + "form_post");
 
 		return urlBuilder.toString();
 	}

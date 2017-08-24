@@ -42,18 +42,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class DesktopProxy implements Observer {
 
-	protected Image icon;
-
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(DesktopProxy.class);
 	
 	public DesktopProxy() {
-		try {
-			this.icon = ImageIO.read(getClass().getClassLoader().getResource("icon.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(107);
-		}
 	}
 
 	/**
