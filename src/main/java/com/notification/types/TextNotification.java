@@ -22,10 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package com.notification.types;
 
-import info.kapable.utils.owanotifier.desktop.action.NotificationMouseAdapter;
-import info.kapable.utils.owanotifier.theme.TextTheme;
-import info.kapable.utils.owanotifier.theme.WindowTheme;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +32,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import info.kapable.utils.owanotifier.desktop.action.NotificationMouseAdapter;
+import info.kapable.utils.owanotifier.theme.TextTheme;
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * A text notification which will display a title and a subtitle.

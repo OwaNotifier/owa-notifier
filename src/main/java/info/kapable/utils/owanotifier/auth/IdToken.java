@@ -24,8 +24,6 @@ SOFTWARE.
 package info.kapable.utils.owanotifier.auth;
 
 
-import info.kapable.utils.owanotifier.OwaNotifier;
-
 import java.io.IOException;
 import java.util.Date;
 
@@ -34,6 +32,8 @@ import org.apache.commons.codec.binary.Base64;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import info.kapable.utils.owanotifier.OwaNotifier;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IdToken {

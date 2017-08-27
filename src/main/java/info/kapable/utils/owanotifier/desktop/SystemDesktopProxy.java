@@ -22,9 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
-import info.kapable.utils.owanotifier.InboxChangeEvent;
-import info.kapable.utils.owanotifier.OwaNotifier;
-
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -37,7 +34,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -47,6 +43,9 @@ import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
 
 public class SystemDesktopProxy extends DesktopProxy {
 

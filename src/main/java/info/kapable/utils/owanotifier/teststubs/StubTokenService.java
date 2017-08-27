@@ -22,12 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.teststubs;
 
-import info.kapable.utils.owanotifier.auth.TokenService;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.kapable.utils.owanotifier.auth.TokenService;
 import retrofit.RetrofitError;
 import retrofit.client.Header;
 import retrofit.client.Response;

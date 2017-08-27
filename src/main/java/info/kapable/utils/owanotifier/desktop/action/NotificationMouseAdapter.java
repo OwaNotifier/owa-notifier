@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop.action;
 
-import info.kapable.utils.owanotifier.desktop.DesktopProxy;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
 
 import javax.swing.JLabel;
+
+import info.kapable.utils.owanotifier.desktop.DesktopProxy;
 
 public class NotificationMouseAdapter extends MouseAdapter {
 

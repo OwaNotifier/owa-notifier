@@ -22,15 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.notification.manager;
 
-import info.kapable.utils.owanotifier.utils.Screen;
-import info.kapable.utils.owanotifier.utils.Time;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.notification.Notification;
 import com.notification.NotificationFactory.Location;
 import com.notification.NotificationManager;
+
+import info.kapable.utils.owanotifier.utils.Screen;
+import info.kapable.utils.owanotifier.utils.Time;
 
 /**
  * Simply displays new Notifications in one corner of the screen on top of each other. Has an option for fading (note -

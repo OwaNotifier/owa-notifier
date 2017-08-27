@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package com.notification.types;
 
-import info.kapable.utils.owanotifier.theme.TextTheme;
-
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+
+import info.kapable.utils.owanotifier.theme.TextTheme;
 
 public class ProgressBarNotification extends BorderLayoutNotification {
 	private JLabel m_label;

@@ -22,14 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
-import info.kapable.utils.owanotifier.InboxChangeEvent;
-import info.kapable.utils.owanotifier.OwaNotifier;
-import info.kapable.utils.owanotifier.notification.manager.SimpleManager;
-import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
-import info.kapable.utils.owanotifier.utils.Time;
-
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -38,6 +31,12 @@ import javax.swing.ImageIcon;
 import com.notification.NotificationFactory;
 import com.notification.NotificationFactory.Location;
 import com.notification.types.IconNotification;
+
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.notification.manager.SimpleManager;
+import info.kapable.utils.owanotifier.theme.ThemePackagePresets;
+import info.kapable.utils.owanotifier.utils.Time;
 
 public class SwingDesktopProxy extends DesktopProxy {
 	IconNotification notification;
