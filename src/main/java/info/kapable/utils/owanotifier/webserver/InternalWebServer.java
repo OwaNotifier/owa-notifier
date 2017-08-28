@@ -7,6 +7,7 @@ import info.kapable.utils.owanotifier.auth.IdToken;
 
 import java.io.IOException;
 import java.net.BindException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
@@ -37,8 +38,13 @@ public class InternalWebServer extends AuthListner implements Runnable, Observer
 		// Search an available port
 		while(this.socket == null) {
 			try {
-				logger.info("Use listen port : " + this.listenPort);
-				this.socket = new ServerSocket(this.listenPort); // Start, listen on port 8080
+				InetAddress[] IP=InetAddress.getAllByName("localhost");
+				if(IP.length < 1) {
+					throw new IOException("Unable to find localhost ip");
+				}
+				this.socket = new ServerSocket(this.listenPort, 10, IP[0]); // Start, listen on port 8080
+				logger.info("Use listen " + this.socket.getInetAddress().toString() + ":" + this.listenPort);
+				
 			} catch (BindException e){
 				this.listenPort = this.listenPort +1;
 				OwaNotifier.getInstance().setProps("listenPort", this.listenPort + "");
