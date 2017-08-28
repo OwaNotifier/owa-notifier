@@ -22,11 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package info.kapable.utils.owanotifier;
 
-import info.kapable.utils.owanotifier.auth.TokenService;
-import info.kapable.utils.owanotifier.service.OutlookService;
-import info.kapable.utils.owanotifier.teststubs.StubTokenService;
-
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
@@ -39,14 +34,16 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.RequestInterceptor.RequestFacade;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
-
 import com.github.markusbernhardt.proxy.ProxySearch;
 import com.squareup.okhttp.OkHttpClient;
+
+import info.kapable.utils.owanotifier.auth.TokenService;
+import info.kapable.utils.owanotifier.service.OutlookService;
+import info.kapable.utils.owanotifier.teststubs.StubTokenService;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.RestAdapter.LogLevel;
+import retrofit.client.OkClient;
 
 /**
  * A proxy class to access to retrofit service

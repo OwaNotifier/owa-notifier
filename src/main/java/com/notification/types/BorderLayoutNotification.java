@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */package com.notification.types;
 
-import info.kapable.utils.owanotifier.theme.WindowTheme;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import info.kapable.utils.owanotifier.theme.WindowTheme;
 
 /**
  * Lays out Swing Components in a BorderLayout.

@@ -23,11 +23,7 @@ SOFTWARE.
  */
 package info.kapable.utils.owanotifier.desktop;
 
-import info.kapable.utils.owanotifier.InboxChangeEvent;
-import info.kapable.utils.owanotifier.OwaNotifier;
-
 import java.awt.Desktop;
-import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -35,10 +31,11 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.imageio.ImageIO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
 
 public abstract class DesktopProxy implements Observer {
 

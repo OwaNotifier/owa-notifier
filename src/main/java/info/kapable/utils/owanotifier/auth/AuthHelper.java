@@ -23,10 +23,6 @@ SOFTWARE.
  */
 package info.kapable.utils.owanotifier.auth;
 
-import info.kapable.utils.owanotifier.JacksonConverter;
-import info.kapable.utils.owanotifier.OwaNotifier;
-import info.kapable.utils.owanotifier.RestfullAcessProxy;
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -34,6 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import info.kapable.utils.owanotifier.JacksonConverter;
+import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.RestfullAcessProxy;
 
 /**
  * Helper class to login on Microsoft using oauth2
