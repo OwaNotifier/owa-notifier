@@ -28,6 +28,7 @@ import info.kapable.utils.owanotifier.auth.AuthListner;
 import info.kapable.utils.owanotifier.auth.IdToken;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
+import info.kapable.utils.owanotifier.desktop.LogWindowPanel;
 import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
 import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
 import info.kapable.utils.owanotifier.service.Folder;
@@ -146,6 +147,7 @@ public class OwaNotifier extends Observable implements Observer {
 	public static void main(String[] args) throws IOException {
 		owanotifier = getInstance();
 		loadConfig();
+		LogWindowPanel WindowPanel = LogWindowPanel.getInstance();
 		owanotifier.boot();
 	}
 	

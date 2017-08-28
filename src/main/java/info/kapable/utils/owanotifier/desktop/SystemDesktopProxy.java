@@ -146,6 +146,20 @@ public class SystemDesktopProxy extends DesktopProxy {
 			}
 
 		});
+		// Create a pop-up menu components
+		final MenuItem displayLogItem = new MenuItem("Afficher les traces");
+		displayLogItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(LogWindowPanel.getInstance().isVisible()) {
+					LogWindowPanel.getInstance().setVisible(false);
+					displayLogItem.setLabel("Afficher les traces");
+				} else {
+					LogWindowPanel.getInstance().setVisible(true);
+					displayLogItem.setLabel("Masquer les traces");
+				}
+			}
+		});
 		MenuItem exitItem = new MenuItem("Exit");
 		exitItem.addActionListener(new ActionListener() {
 
@@ -158,6 +172,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 
 		// Add components to pop-up menu
 		popup.add(aboutItem);
+		popup.add(displayLogItem);
 		popup.addSeparator();
 		popup.add(exitItem);
 		return popup;
