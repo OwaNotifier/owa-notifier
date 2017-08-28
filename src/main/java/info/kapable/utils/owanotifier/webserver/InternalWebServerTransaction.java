@@ -21,37 +21,44 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package info.kapable.utils.owanotifier.auth;
+package info.kapable.utils.owanotifier.webserver;
 
 import info.kapable.utils.owanotifier.OwaNotifier;
+import info.kapable.utils.owanotifier.auth.IdToken;
+import info.kapable.utils.owanotifier.auth.TokenResponse;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Observable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebserverClientHandler extends Thread {
+public class InternalWebServerTransaction extends Observable implements Runnable {
 	private Socket socket; // The accepted socket from the Webserver
-	private String code;
+	public String code;
 	private String expectedNonce;
 	private String idToken;
 	public TokenResponse tokenResponse = null;
 	public IdToken idTokenObj;
+	public InternalWebServer webServer;
 
 	// The logger
-    private static Logger logger = LoggerFactory.getLogger(WebserverClientHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(InternalWebServerTransaction.class);
     
 	// Start the thread in the constructor
-	public WebserverClientHandler(Socket s, String nonce) {
+	public InternalWebServerTransaction(Socket s, InternalWebServer webServer, String nonce) {
 		socket = s;
 		expectedNonce = nonce;
-		start();
+		this.webServer = webServer;
+
+		// detach client
+        Thread clientThread = new Thread(this);
+        clientThread.start();
 	}
 
 	/**
@@ -136,7 +143,7 @@ public class WebserverClientHandler extends Thread {
 			out.write("HTTP/1.1 200 OK\r\n");
 			out.write("Content-Type: text/html\r\n");
 			out.write("\r\n");
-			String closeWindow = OwaNotifier.getProps().getProperty("closeWindow");
+			String closeWindow = OwaNotifier.getInstance().getProps().getProperty("closeWindow");
 			if(closeWindow == null) {
 				closeWindow = "false";
 			}
@@ -155,17 +162,9 @@ public class WebserverClientHandler extends Thread {
 				OwaNotifier.exit(5);
 			}
 			this.idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
-			if (idTokenObj != null) {
-				this.tokenResponse = AuthHelper.getTokenFromAuthCode(code, idTokenObj.getTenantId());
-				if(this.tokenResponse.getError() == null) {
-					logger.info("User has a valid token");
-				} else {
-					logger.error(this.tokenResponse.getError());
-					logger.error(this.tokenResponse.getErrorDescription());
-					logger.error("User don't have a valid token");
-					OwaNotifier.exit(255);
-				}
-			}
+			this.setChanged();
+			this.notifyObservers(this.idTokenObj);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			OwaNotifier.exit(255);

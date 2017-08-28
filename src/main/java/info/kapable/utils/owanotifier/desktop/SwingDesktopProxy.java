@@ -76,7 +76,7 @@ public class SwingDesktopProxy extends DesktopProxy {
 		}
 		// Display it :
 		try {
-			fade.addNotification(notification, Time.seconds(Integer.parseInt(OwaNotifier.getProps().getProperty("notification.fade_time"))));
+			fade.addNotification(notification, Time.seconds(Integer.parseInt(OwaNotifier.getInstance().getProps().getProperty("notification.fade_time"))));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

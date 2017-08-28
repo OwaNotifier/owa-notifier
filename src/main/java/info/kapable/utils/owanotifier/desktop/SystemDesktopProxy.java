@@ -174,7 +174,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 				trayIcon.setImage(this.imageNoMail);
 			}
 
-			if(OwaNotifier.getProps().getProperty("notification.type").contentEquals("system")) {
+			if(OwaNotifier.getInstance().getProps().getProperty("notification.type").contentEquals("system")) {
 				trayIcon.displayMessage(event.getEventTitle(), event.getEventText(), MessageType.INFO);
 			}
 		} else {

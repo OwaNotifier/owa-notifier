@@ -24,9 +24,9 @@ SOFTWARE.
 package info.kapable.utils.owanotifier;
 
 import info.kapable.utils.owanotifier.auth.AuthHelper;
+import info.kapable.utils.owanotifier.auth.AuthListner;
 import info.kapable.utils.owanotifier.auth.IdToken;
 import info.kapable.utils.owanotifier.auth.TokenResponse;
-import info.kapable.utils.owanotifier.auth.WebserverClientHandler;
 import info.kapable.utils.owanotifier.desktop.DesktopProxy;
 import info.kapable.utils.owanotifier.desktop.SwingDesktopProxy;
 import info.kapable.utils.owanotifier.desktop.SystemDesktopProxy;
@@ -35,16 +35,15 @@ import info.kapable.utils.owanotifier.service.Message;
 import info.kapable.utils.owanotifier.service.MessageCollection;
 import info.kapable.utils.owanotifier.service.OutlookService;
 import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
+import info.kapable.utils.owanotifier.webserver.InternalWebServer;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.BindException;
 import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Calendar;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -63,7 +62,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * @author Mathieu GOULIN
  */
-public class OwaNotifier extends Observable {
+public class OwaNotifier extends Observable implements Observer {
 	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
 	// the return code for exit
@@ -78,6 +77,7 @@ public class OwaNotifier extends Observable {
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(OwaNotifier.class);
+	private static OwaNotifier owanotifier;
         
 	/**
 	 * Load config from properties in ressource
@@ -102,7 +102,7 @@ public class OwaNotifier extends Observable {
 	 * @throws IOException
 	 * 		In case of exception during loading properties
 	 */
-	public static Properties getProps() throws IOException {
+	public Properties getProps() throws IOException {
 		if(OwaNotifier.props == null) {
 			loadConfig();
 		}
@@ -115,8 +115,8 @@ public class OwaNotifier extends Observable {
 	 * @param value
 	 * @throws IOException 
 	 */
-	static void setProps(String key, String value) throws IOException {
-		OwaNotifier.getProps();
+	public void setProps(String key, String value) throws IOException {
+		this.getProps();
 		if(value != null)
 			OwaNotifier.props.put(key, value);
 		else
@@ -144,9 +144,9 @@ public class OwaNotifier extends Observable {
 	 * 		In case of exception during configuration loading
 	 */
 	public static void main(String[] args) throws IOException {
-		OwaNotifier on = new OwaNotifier();
+		owanotifier = getInstance();
 		loadConfig();
-		on.boot();
+		owanotifier.boot();
 	}
 	
 	/**
@@ -190,23 +190,16 @@ public class OwaNotifier extends Observable {
 		UUID state = UUID.randomUUID();
 		UUID nonce = UUID.randomUUID();
 		
-		// Start a webserver to handle return of oauth
 		try {
-			int listenPort = Integer.parseInt(OwaNotifier.getProps().getProperty("listenPort", "8080"));
-			ServerSocket serverSocket = null;
+			// Start AuthListener
+			// Start a web server to handle return of OAuth
+			AuthListner listner = new InternalWebServer(nonce);
 			
-			// Search an available port
-			while(serverSocket == null) {
-				try {
-					logger.info("Use listen port : " + listenPort);
-					serverSocket = new ServerSocket(listenPort); // Start, listen on port 8080
-				} catch (BindException e){
-					listenPort = listenPort +1;
-					OwaNotifier.setProps("listenPort", listenPort + "");
-				}
-			}
+			// Add observer listener to start loop after authentication
+			listner.addObserver(this);
 			
-			// Redirect user to ms authentification webpage
+			// Redirect user to MS authentication web page
+			int listenPort = Integer.parseInt(this.getProps().getProperty("listenPort"));
 			String loginUrl = AuthHelper.getLoginUrl(state, nonce, listenPort);
 			logger.info("Redirect user to loginUrl: " + loginUrl);
 			try {
@@ -214,27 +207,6 @@ public class OwaNotifier extends Observable {
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 				OwaNotifier.exit(3);
-			}
-			// Wait for a client to connect
-			Socket s = serverSocket.accept(); 
-			WebserverClientHandler c = new WebserverClientHandler(s, nonce.toString()); // Handle the client in a separate thread
-			c.join();
-			// Wait return of webserver
-			Socket s2 = serverSocket.accept(); 
-			WebserverClientHandler c2 = new WebserverClientHandler(s2, nonce.toString()); // Handle the client in a separate thread
-			
-			c2.join();
-			s.close();
-			s2.close();
-			serverSocket.close();
-			
-			// Save tokenResponse in case of success
-			if(c2.tokenResponse == null) {
-				logger.error("No token, error");
-				OwaNotifier.exit(5);
-			} else {
-				this.tokenResponse = c2.tokenResponse;
-				this.idToken = c2.idTokenObj;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -304,5 +276,44 @@ public class OwaNotifier extends Observable {
 	 */
 	public static int getRc() {
 		return rc;
+	}
+
+	public static OwaNotifier getInstance() {
+		if(owanotifier == null) {
+			owanotifier = new OwaNotifier();
+		}
+		return owanotifier;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		InternalWebServer authListner = (InternalWebServer) o;
+		if(authListner.tokenResponse == null) {
+			logger.error("No token, error");
+			OwaNotifier.exit(5);
+		} else {
+			this.tokenResponse = authListner.tokenResponse;
+			this.idToken = authListner.idTokenObj;
+		}
+		try {
+			this.infiniteLoop();
+		} catch (JsonParseException e) {
+			logger.error("JsonParseException durring infiniteLoop()",e);
+			e.printStackTrace();
+			OwaNotifier.exit(6);
+		} catch (JsonMappingException e) {
+			logger.error("JsonMappingException durring infiniteLoop()",e);
+			e.printStackTrace();
+			OwaNotifier.exit(6);
+		} catch (IOException e) {
+			logger.error("IOException durring infiniteLoop()",e);
+			e.printStackTrace();
+			OwaNotifier.exit(6);
+		} catch (InterruptedException e) {
+			logger.error("InterruptedException durring infiniteLoop()",e);
+			e.printStackTrace();
+			OwaNotifier.exit(6);
+		}
+		
 	}
 }

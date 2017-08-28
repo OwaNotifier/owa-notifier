@@ -68,7 +68,7 @@ public class AuthHelper {
 	private static String getAppId() {
 		if (appId == null) {
 			try {
-				appId = OwaNotifier.getProps().getProperty("appId");
+				appId = OwaNotifier.getInstance().getProps().getProperty("appId");
 			} catch (Exception e) {
 				return null;
 			}
@@ -84,7 +84,7 @@ public class AuthHelper {
 	private static String getAppPassword() {
 		if (appPassword == null) {
 			try {
-				appPassword = OwaNotifier.getProps().getProperty("appPassword");
+				appPassword = OwaNotifier.getInstance().getProps().getProperty("appPassword");
 			} catch (Exception e) {
 				return null;
 			}
@@ -103,11 +103,11 @@ public class AuthHelper {
 	 */
 	private static String getRedirectUrl() throws NumberFormatException,
 			IOException {
-		int listenPort = Integer.parseInt(OwaNotifier.getProps().getProperty(
+		int listenPort = Integer.parseInt(OwaNotifier.getInstance().getProps().getProperty(
 				"listenPort"));
 		if (redirectUrl == null) {
 			try {
-				redirectUrl = OwaNotifier.getProps().getProperty("redirectUrl");
+				redirectUrl = OwaNotifier.getInstance().getProps().getProperty("redirectUrl");
 				redirectUrl = redirectUrl.replace("8080", listenPort + "");
 			} catch (Exception e) {
 				return null;
