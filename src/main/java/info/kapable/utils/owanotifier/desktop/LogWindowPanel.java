@@ -5,6 +5,7 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class LogWindowPanel extends JFrame  {
@@ -44,8 +45,8 @@ public class LogWindowPanel extends JFrame  {
 		TextAreaAppender.setTextArea(jLogTextArea);
 		
         JPanel thePanel = new JPanel(new BorderLayout());
-
-        thePanel.add(jLogTextArea);
+        JScrollPane scrollPane = new JScrollPane(jLogTextArea);
+        thePanel.add(scrollPane);
 		this.add(thePanel);
 	}
 }
