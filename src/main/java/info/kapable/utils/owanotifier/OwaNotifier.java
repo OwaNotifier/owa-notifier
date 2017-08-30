@@ -42,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
@@ -165,23 +166,6 @@ public class OwaNotifier extends Observable implements Observer {
 		// Load token from oauth2 process
 		// Display login page
 		this.login();
-		
-		// When login is ok loop
-		try {
-			this.infiniteLoop();
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(6);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(6);
-		} catch (IOException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(6);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			OwaNotifier.exit(6);
-		}
 	}
 	
 	/**
@@ -269,6 +253,20 @@ public class OwaNotifier extends Observable implements Observer {
 				this.notifyObservers(new InboxChangeEvent(inbox, InboxChangeEvent.TYPE_LESS_NEW_MSG));
 			}
 			lastUnreadCount = inbox.getUnreadItemCount();
+			System.gc();
+			Runtime runtime = Runtime.getRuntime();
+
+			NumberFormat format = NumberFormat.getInstance();
+
+			StringBuilder sb = new StringBuilder();
+			long maxMemory = runtime.maxMemory();
+			long allocatedMemory = runtime.totalMemory();
+			long freeMemory = runtime.freeMemory();
+			logger.info("==================================================");
+			logger.info("free memory: " + format.format(freeMemory / 1024));
+			logger.info("allocated memory: " + format.format(allocatedMemory / 1024));
+			logger.info("max memory: " + format.format(maxMemory / 1024));
+			logger.info("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
 		}
 	}
 

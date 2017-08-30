@@ -162,6 +162,12 @@ public class InternalWebServerTransaction extends Observable implements Runnable
 				OwaNotifier.exit(5);
 			}
 			this.idTokenObj = IdToken.parseEncodedToken(idToken, expectedNonce.toString());
+
+			try {
+				this.socket.close();
+			} catch (IOException e) {
+				logger.error("IOException durring close socket", e);
+			}
 			this.setChanged();
 			this.notifyObservers(this.idTokenObj);
 			
@@ -169,5 +175,6 @@ public class InternalWebServerTransaction extends Observable implements Runnable
 			e.printStackTrace();
 			OwaNotifier.exit(255);
 		}
+		Thread.currentThread().interrupt();
 	}
 }

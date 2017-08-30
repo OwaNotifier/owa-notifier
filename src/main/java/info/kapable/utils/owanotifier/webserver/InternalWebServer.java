@@ -33,6 +33,9 @@ import java.net.BindException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.UUID;
@@ -81,17 +84,36 @@ public class InternalWebServer extends AuthListner implements Runnable, Observer
 
 	@Override
 	public void run() {
-		while (true) {
+		List<Socket> sockets = new ArrayList<Socket>();
+		while (this.tokenResponse == null) {
 			Socket s;
 			try {
 				s = this.socket.accept();
+				sockets.add(s);
 				InternalWebServerTransaction c = new InternalWebServerTransaction(s,this, nonce.toString());
 				c.addObserver(this);
 			} catch (IOException e) {
-				logger.error("IOException while processing client requests", e);
-				e.printStackTrace();
-			} 
+				if(e instanceof SocketException) {
+					// When user obtain a token closing listen socket cause this exception
+					// In this case this is a normal exception
+					logger.info("Closing listening socket.");
+				} else {
+					logger.error("IOException while accepting client requests", e);
+				}
+				// Close all transcation sockets
+				for(Socket transactionSocket: sockets) {
+					try {
+						if(!transactionSocket.isClosed()) {
+							transactionSocket.close();
+						}
+					} catch (IOException e1) {
+						logger.error("IOException while closing client requests", e1);
+					}
+				}
+				serverThread.interrupt();
+			}
         }		
+		serverThread.interrupt();
 	}
 
 	@Override
@@ -103,9 +125,14 @@ public class InternalWebServer extends AuthListner implements Runnable, Observer
 			if(tokenResponse.getError() == null) {
 				logger.info("User has a valid token");
 				
+				try {
+					logger.info("Sopping listening thread");
+					this.socket.close();
+				} catch (IOException e) {
+					logger.error("IOException durring ", e);
+				}
 				this.setChanged();
 				this.notifyObservers(tokenResponse);
-				serverThread.interrupt();
 			} else {
 				logger.error(tokenResponse.getError());
 				logger.error(tokenResponse.getErrorDescription());
