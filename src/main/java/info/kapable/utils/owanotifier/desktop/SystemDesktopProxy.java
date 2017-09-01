@@ -81,7 +81,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 						Desktop dt = Desktop.getDesktop();
 						URL f;
 						try {
-							f = new URL("https://outlook.office365.com/owa/");
+							f = new URL(OwaNotifier.OWA_URL);
 							dt.browse(f.toURI());
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block

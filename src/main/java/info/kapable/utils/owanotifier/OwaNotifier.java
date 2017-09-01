@@ -68,6 +68,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class OwaNotifier extends Observable implements Observer {
 	private static final long LOOP_WAIT_TIME = 5000;
+	public static final String OWA_URL = "https://outlook.office365.com/owa/";
 	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
 	// the return code for exit
@@ -175,7 +176,7 @@ public class OwaNotifier extends Observable implements Observer {
 	 * 
 	 */
 	private void redirectUserToWebMail() throws MalformedURLException {
-		DesktopProxy.browse("https://outlook.office.com/owa/");
+		DesktopProxy.browse(OwaNotifier.OWA_URL);
 	}
 
 	/**
