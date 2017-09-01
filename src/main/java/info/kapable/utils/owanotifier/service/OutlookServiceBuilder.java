@@ -29,11 +29,21 @@ import org.slf4j.LoggerFactory;
 
 import info.kapable.utils.owanotifier.RestfullAcessProxy;
 
+/**
+ * A builder to create OutlookService
+ */
 public class OutlookServiceBuilder {
-	
-	// The logger
-    private static Logger logger = LoggerFactory.getLogger(OutlookServiceBuilder.class);
-
+	/**
+	 * Build an OutlookService
+	 * @param accessTokenSource
+	 * 	accessToken to authenticate of API
+	 * @param userEmailSource
+	 * 	If possible the userEmail
+	 * @return
+	 * 	an outlookService Instance
+	 * @throws IOException
+	 * 	in case of IOException
+	 */
 	public static OutlookService getOutlookService(String accessTokenSource, String userEmailSource) throws IOException {
 		return RestfullAcessProxy.getOutlookService(accessTokenSource, userEmailSource);
 	}
