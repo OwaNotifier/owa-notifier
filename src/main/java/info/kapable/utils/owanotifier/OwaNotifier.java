@@ -38,7 +38,9 @@ import info.kapable.utils.owanotifier.service.OutlookService;
 import info.kapable.utils.owanotifier.service.OutlookServiceBuilder;
 import info.kapable.utils.owanotifier.webserver.InternalWebServer;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -65,6 +67,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Mathieu GOULIN
  */
 public class OwaNotifier extends Observable implements Observer {
+	private static final long LOOP_WAIT_TIME = 5000;
 	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
 	// the return code for exit
@@ -76,6 +79,7 @@ public class OwaNotifier extends Observable implements Observer {
 	// A public object to store auth 
 	public TokenResponse tokenResponse;
 	private IdToken idToken;
+	private File lock;
 	
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(OwaNotifier.class);
@@ -148,10 +152,32 @@ public class OwaNotifier extends Observable implements Observer {
 	public static void main(String[] args) throws IOException {
 		owanotifier = getInstance();
 		loadConfig();
-		LogWindowPanel WindowPanel = LogWindowPanel.getInstance();
+		LogWindowPanel.getInstance();
+	    // Check if lock exist
+		String tmp = System.getProperty("java.io.tmpdir");
+		owanotifier.lock = new File(tmp, "owanotifier.lock");
+	    if(owanotifier.lock.isFile()) {
+	    	long lm = owanotifier.lock.lastModified();
+	    	logger.info("Lock modified time : " + lm);
+	    	logger.info("System current time : " + System.currentTimeMillis());
+	    	// If lock is not update
+	    	if((System.currentTimeMillis() - lm) < (LOOP_WAIT_TIME * 2)) {
+		    	logger.info("Lock modified time < " + (LOOP_WAIT_TIME * 2) + " => Exit 0");
+	    		owanotifier.redirectUserToWebMail();
+	    		exit(0);
+	    	}
+	    }
 		owanotifier.boot();
 	}
 	
+	/**
+	 * @throws MalformedURLException 
+	 * 
+	 */
+	private void redirectUserToWebMail() throws MalformedURLException {
+		DesktopProxy.browse("https://outlook.office.com/owa/");
+	}
+
 	/**
 	 * Boot application
 	 */
@@ -219,8 +245,9 @@ public class OwaNotifier extends Observable implements Observer {
 		OutlookService outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);
 		
 		while (true) {
-			Thread.sleep(5000);
+			Thread.sleep(LOOP_WAIT_TIME);
 		    Calendar now = Calendar.getInstance();
+		    this.updateLock();
 		    
 		    // If token is expired refresh token
 			if(this.tokenResponse.getExpirationTime().before(now.getTime())) {
@@ -258,16 +285,26 @@ public class OwaNotifier extends Observable implements Observer {
 
 			NumberFormat format = NumberFormat.getInstance();
 
-			StringBuilder sb = new StringBuilder();
 			long maxMemory = runtime.maxMemory();
 			long allocatedMemory = runtime.totalMemory();
 			long freeMemory = runtime.freeMemory();
-			logger.info("==================================================");
-			logger.info("free memory: " + format.format(freeMemory / 1024));
-			logger.info("allocated memory: " + format.format(allocatedMemory / 1024));
-			logger.info("max memory: " + format.format(maxMemory / 1024));
-			logger.info("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
+			logger.debug("==================================================");
+			logger.debug("free memory: " + format.format(freeMemory / 1024));
+			logger.debug("allocated memory: " + format.format(allocatedMemory / 1024));
+			logger.debug("max memory: " + format.format(maxMemory / 1024));
+			logger.debug("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
 		}
+	}
+
+	/**
+	 * Update lock file
+	 * @throws IOException 
+	 */
+	private void updateLock() throws IOException {
+		logger.debug("Update lock file");
+		FileWriter writer = new FileWriter(this.lock);
+	    writer.write(System.currentTimeMillis() + "");
+	    writer.close();
 	}
 
 	/**
