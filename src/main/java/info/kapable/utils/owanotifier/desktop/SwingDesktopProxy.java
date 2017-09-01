@@ -54,6 +54,10 @@ public class SwingDesktopProxy extends DesktopProxy {
 
 	@Override
 	protected void processEvent(InboxChangeEvent event) throws IOException {
+		// If mute don't display notification
+		if(OwaNotifier.isMute()) {
+			return;
+		}
 		SimpleManager fade = new SimpleManager(Location.SOUTHEAST);
 		NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanLight());
 

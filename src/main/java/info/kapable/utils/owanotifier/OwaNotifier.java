@@ -50,6 +50,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.prefs.Preferences;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,10 +68,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Mathieu GOULIN
  */
 public class OwaNotifier extends Observable implements Observer {
-	private static final long LOOP_WAIT_TIME = 5000;
-	public static final String OWA_URL = "https://outlook.office365.com/owa/";
 	// testMode is true when using this class on jUnit context
 	public static boolean testMode = false;
+	
 	// the return code for exit
 	private static int rc;
 	
@@ -85,6 +85,9 @@ public class OwaNotifier extends Observable implements Observer {
 	// The logger
     private static Logger logger = LoggerFactory.getLogger(OwaNotifier.class);
 	private static OwaNotifier owanotifier;
+
+	// variable to store mute status
+	private static boolean mute;
         
 	/**
 	 * Load config from properties in ressource
@@ -100,6 +103,35 @@ public class OwaNotifier extends Observable implements Observer {
 		} else {
 			throw new FileNotFoundException("Property file '" + authConfigFile + "' not found in the classpath.");
 		}
+		Preferences p = Preferences.userRoot();
+	    int OwaNotifierMute = p.getInt("OwaNotifierMute", 0);
+	    if(OwaNotifierMute > 0) {
+	    	setMute(true);
+	    } else {
+	    	setMute(false);
+	    }
+	}
+	
+	/**
+	 * Update mute status
+	 * @param value
+	 */
+	public static void setMute(boolean value) {
+		Preferences p = Preferences.userRoot();
+		if(value) {
+			p.putInt("OwaNotifierMute", 1);
+			OwaNotifier.mute = true;
+		} else {
+			p.putInt("OwaNotifierMute", 0);
+			OwaNotifier.mute = false;
+		}
+	}
+	
+	/**
+	 * Retrieve mute status
+	 */
+	public static boolean isMute() {
+		return OwaNotifier.mute;
 	}
 	
 	/**
@@ -162,8 +194,9 @@ public class OwaNotifier extends Observable implements Observer {
 	    	logger.info("Lock modified time : " + lm);
 	    	logger.info("System current time : " + System.currentTimeMillis());
 	    	// If lock is not update
-	    	if((System.currentTimeMillis() - lm) < (LOOP_WAIT_TIME * 2)) {
-		    	logger.info("Lock modified time < " + (LOOP_WAIT_TIME * 2) + " => Exit 0");
+	    	int loopWaitTime = Integer.parseInt(owanotifier.getProps().getProperty("loopWaitTime"));
+	    	if((System.currentTimeMillis() - lm) < (loopWaitTime * 2)) {
+		    	logger.info("Lock modified time < " + (loopWaitTime * 2) + " => Exit 0");
 	    		owanotifier.redirectUserToWebMail();
 	    		exit(0);
 	    	}
@@ -176,7 +209,11 @@ public class OwaNotifier extends Observable implements Observer {
 	 * 
 	 */
 	private void redirectUserToWebMail() throws MalformedURLException {
-		DesktopProxy.browse(OwaNotifier.OWA_URL);
+		try {
+			DesktopProxy.browse(this.getProps().getProperty("owaUrl"));
+		} catch (IOException e) {
+			logger.error("IOException while attempting to browse owaUrl ",e);
+		}
 	}
 
 	/**
@@ -244,9 +281,10 @@ public class OwaNotifier extends Observable implements Observer {
 		String folder = "inbox";
 		JacksonConverter c = new JacksonConverter(new ObjectMapper());
 		OutlookService outlookService = OutlookServiceBuilder.getOutlookService(this.tokenResponse.getAccessToken(), null);
-		
+
+    	int loopWaitTime = Integer.parseInt(owanotifier.getProps().getProperty("loopWaitTime"));
 		while (true) {
-			Thread.sleep(LOOP_WAIT_TIME);
+			Thread.sleep(loopWaitTime);
 		    Calendar now = Calendar.getInstance();
 		    this.updateLock();
 		    

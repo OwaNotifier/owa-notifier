@@ -84,13 +84,13 @@ public class SystemDesktopProxy extends DesktopProxy {
 						Desktop dt = Desktop.getDesktop();
 						URL f;
 						try {
-							f = new URL(OwaNotifier.OWA_URL);
+							f = new URL(OwaNotifier.getInstance().getProps().getProperty("owaUrl"));
 							dt.browse(f.toURI());
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							logger.error("IOException when calling browse on " + OwaNotifier.OWA_URL, e1);
+							logger.error("IOException when calling browse on owaUrl", e1);
 						} catch (URISyntaxException e1) {
-							logger.error("URISyntaxException when calling browse on " + OwaNotifier.OWA_URL, e1);
+							logger.error("URISyntaxException when calling browse on owaUrl", e1);
 						}
 					}
 				}
@@ -164,6 +164,19 @@ public class SystemDesktopProxy extends DesktopProxy {
 				}
 			}
 		});
+		// Create a pop-up menu components
+		final CheckboxMenuItem muteLogItem = new CheckboxMenuItem("Ne plus afficher de notifications");
+		muteLogItem.setState(OwaNotifier.isMute());
+		muteLogItem.addItemListener(new ItemListener() {
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.SELECTED) {
+							OwaNotifier.setMute(true);
+						} else {
+							OwaNotifier.setMute(false);
+						}
+					}
+				});
 		MenuItem exitItem = new MenuItem("Exit");
 		exitItem.addActionListener(new ActionListener() {
 
@@ -177,6 +190,7 @@ public class SystemDesktopProxy extends DesktopProxy {
 		// Add components to pop-up menu
 		popup.add(aboutItem);
 		popup.add(displayLogItem);
+		popup.add(muteLogItem);
 		popup.addSeparator();
 		popup.add(exitItem);
 		return popup;
