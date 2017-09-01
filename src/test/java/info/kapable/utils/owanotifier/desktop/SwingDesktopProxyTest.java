@@ -23,6 +23,7 @@ SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
 import info.kapable.utils.owanotifier.InboxChangeEvent;
+import info.kapable.utils.owanotifier.OwaNotifier;
 import info.kapable.utils.owanotifier.service.EmailAddress;
 import info.kapable.utils.owanotifier.service.Folder;
 import info.kapable.utils.owanotifier.service.Message;
@@ -36,6 +37,7 @@ public class SwingDesktopProxyTest extends TestCase{
 	@Test
 	public void testMessageReceive() {
 		SwingDesktopProxy s = new SwingDesktopProxy();
+		OwaNotifier.setMute(false);
 		// Initial Notification
 		Folder folder = new Folder();
 		folder.setUnreadItemCount(1);
@@ -68,6 +70,7 @@ public class SwingDesktopProxyTest extends TestCase{
 			e.printStackTrace();
 			fail("IOException");
 		}
+		assertTrue(s.getNotification() != null);
 		assertTrue(s.getNotification().getTitle().contains("Subject de Junit"));
 		assertTrue(s.getNotification().getSubtitle().contains("BodyPreview de testUnitaire"));
 		assertTrue(s.getNotification().getFrom().contains("De: Foo Bar"));

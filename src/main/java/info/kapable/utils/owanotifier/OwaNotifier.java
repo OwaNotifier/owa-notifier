@@ -354,6 +354,10 @@ public class OwaNotifier extends Observable implements Observer {
 		return rc;
 	}
 
+	/**
+	 * @return
+	 * 	Singleton of OwaNotifier
+	 */
 	public static OwaNotifier getInstance() {
 		if(owanotifier == null) {
 			owanotifier = new OwaNotifier();
