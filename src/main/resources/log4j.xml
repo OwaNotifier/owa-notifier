@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration debug="true"
+<log4j:configuration 
 	xmlns:log4j='http://jakarta.apache.org/log4j/'>
  
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
@@ -17,15 +17,15 @@
              <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
          </layout>
     </appender> 
+    <logger name="info.kapable">
+        <level value="info" />
+		<appender-ref ref="SWING"/>
+    </logger>
 	<root>
 		<level value="info" />
 		<appender-ref ref="console" />
 	</root>
 	
 
-    <logger name="info.kapable">
-        <level value="info" />
-		<appender-ref ref="SWING"/>
-    </logger>
  
 </log4j:configuration>
