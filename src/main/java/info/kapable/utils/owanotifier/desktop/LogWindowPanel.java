@@ -24,7 +24,7 @@ SOFTWARE.
 package info.kapable.utils.owanotifier.desktop;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.CheckboxMenuItem;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class LogWindowPanel extends JFrame  {
+    public CheckboxMenuItem displayLogItem;
 
 	/**
 	 * The serial version UID
@@ -71,5 +72,18 @@ public class LogWindowPanel extends JFrame  {
         JScrollPane scrollPane = new JScrollPane(jLogTextArea);
         thePanel.add(scrollPane);
 		this.add(thePanel);
+		
+		/*
+		 * On close update notification tray
+		 */
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				if(displayLogItem != null) {
+					displayLogItem.setLabel("Afficher les traces");
+					displayLogItem.setState(false);
+				}
+		    }
+		});
 	}
 }

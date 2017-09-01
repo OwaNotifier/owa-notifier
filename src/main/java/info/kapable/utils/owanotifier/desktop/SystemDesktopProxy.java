@@ -23,6 +23,7 @@ SOFTWARE.
  */package info.kapable.utils.owanotifier.desktop;
 
 import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -32,6 +33,8 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -84,11 +87,10 @@ public class SystemDesktopProxy extends DesktopProxy {
 							f = new URL(OwaNotifier.OWA_URL);
 							dt.browse(f.toURI());
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
+							logger.error("IOException when calling browse on " + OwaNotifier.OWA_URL, e1);
 						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.error("URISyntaxException when calling browse on " + OwaNotifier.OWA_URL, e1);
 						}
 					}
 				}
@@ -147,10 +149,12 @@ public class SystemDesktopProxy extends DesktopProxy {
 
 		});
 		// Create a pop-up menu components
-		final MenuItem displayLogItem = new MenuItem("Afficher les traces");
-		displayLogItem.addActionListener(new ActionListener() {
+		final CheckboxMenuItem displayLogItem = new CheckboxMenuItem("Afficher les traces");
+		LogWindowPanel.getInstance().displayLogItem = displayLogItem;
+		
+		displayLogItem.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void itemStateChanged(ItemEvent e) {
 				if(LogWindowPanel.getInstance().isVisible()) {
 					LogWindowPanel.getInstance().setVisible(false);
 					displayLogItem.setLabel("Afficher les traces");
