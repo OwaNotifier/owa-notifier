@@ -32,7 +32,11 @@ import org.apache.log4j.spi.LoggingEvent;
 public class TextAreaAppender extends WriterAppender {
     private static JTextArea jTextArea;
  
-    /** Set the target JTextArea for the logging information to appear. */
+    /**
+     *  Set the target JTextArea for the logging information to appear. 
+     *  @param jTextArea
+     *  	Set textArea object to receive logs
+     */
     public static void setTextArea(JTextArea jTextArea) {
         TextAreaAppender.jTextArea = jTextArea;
     }

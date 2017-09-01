@@ -56,7 +56,9 @@ public class InternalWebServer extends AuthListner implements Runnable, Observer
     /**
      * Build a new instance of InternalWebServer
      * @param nonce 
+     * 	A string to verify in responses
      * @throws IOException
+     * 	In case of Exception when starting webserver
      */
 	public InternalWebServer(UUID nonce) throws IOException {
 		this.listenPort = Integer.parseInt(OwaNotifier.getInstance().getProps().getProperty("listenPort", "8080"));

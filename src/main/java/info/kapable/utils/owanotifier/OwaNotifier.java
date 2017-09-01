@@ -113,8 +113,9 @@ public class OwaNotifier extends Observable implements Observer {
 	}
 	
 	/**
-	 * Update mute status
+	 * Update mute status in Java/Prefs, this state is saving and restoring at OwaNotifier boot
 	 * @param value
+	 * 	true to set OwaNotifier in mute mode
 	 */
 	public static void setMute(boolean value) {
 		Preferences p = Preferences.userRoot();
@@ -129,6 +130,8 @@ public class OwaNotifier extends Observable implements Observer {
 	
 	/**
 	 * Retrieve mute status
+	 * @return
+	 * 	true if OwaNotifier is in mute mode
 	 */
 	public static boolean isMute() {
 		return OwaNotifier.mute;
@@ -151,8 +154,11 @@ public class OwaNotifier extends Observable implements Observer {
 	/**
 	 * Update a property
 	 * @param key
+	 * 	String to identify property in store
 	 * @param value
-	 * @throws IOException 
+	 * 	The value to store
+	 * @throws IOException
+	 * 	In case of error when storing in properties 
 	 */
 	public void setProps(String key, String value) throws IOException {
 		this.getProps();

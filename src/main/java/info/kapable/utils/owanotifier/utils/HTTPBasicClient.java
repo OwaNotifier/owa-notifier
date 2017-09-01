@@ -32,8 +32,6 @@ import java.net.UnknownHostException;
 
 /**
  * A basic HTTP client to test auth
- * 
- * @author Mathieu GOULIN <mathieu.goulin@gadz.org>
  */
 public class HTTPBasicClient extends Thread{
 
@@ -44,8 +42,8 @@ public class HTTPBasicClient extends Thread{
 	public int listenPort = 8080;
 	
 	/**
-	 *  
 	 * @param input input to pass on server
+	 * @param host host to listen
 	 * @param listenPort server port
 	 */
 	public HTTPBasicClient(String input, String host, int listenPort) {

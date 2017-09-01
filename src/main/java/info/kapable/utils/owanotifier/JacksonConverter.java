@@ -46,6 +46,7 @@ public class JacksonConverter implements Converter {
     /**
      * Update the objectMapper field
      * @param objectMapper
+     * 	The new object Mapper
      */
     public JacksonConverter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -60,8 +61,11 @@ public class JacksonConverter implements Converter {
      * @return
      * 	An unserialized java object
      * @throws JsonParseException
+     * 	In case of Exception durring parsing
      * @throws JsonMappingException
+     * 	In case of body is not correct Json
      * @throws IOException
+     * 	In case of IOException
      */
     public Object fromBody(TypedInput body, Type type) throws JsonParseException, JsonMappingException, IOException {
         JavaType javaType = objectMapper.getTypeFactory().constructType(type);
