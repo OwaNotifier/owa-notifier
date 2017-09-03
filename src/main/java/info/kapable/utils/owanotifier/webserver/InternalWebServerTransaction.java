@@ -149,9 +149,9 @@ public class InternalWebServerTransaction extends Observable implements Runnable
 			}
 
 			if(closeWindow.contentEquals("false")) {
-				out.write("<html><body><meta http-equiv='refresh' content='0; url=https://outlook.office.com/owa/' /></body></html>");
+				out.write(this.readFileAsString("redirectOwa.html"));
 			} else {
-				out.write("<html><body><script>function close_window() { window.close(); } close_window();</script><a href='javascript:close_window();'>Fermer cette fen&ecirc;tre</a></body></html>");
+				out.write(this.readFileAsString("closeWindow.html"));
 			}
 
 			// do not in.close();
