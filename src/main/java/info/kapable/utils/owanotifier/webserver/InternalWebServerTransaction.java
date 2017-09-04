@@ -168,6 +168,10 @@ public class InternalWebServerTransaction extends Observable implements Runnable
 			} catch (IOException e) {
 				logger.error("IOException durring close socket", e);
 			}
+			if(this.idTokenObj == null) {
+				logger.error("Error retriving token");
+				OwaNotifier.exit(255);
+			}
 			this.setChanged();
 			this.notifyObservers(this.idTokenObj);
 			
