@@ -1,6 +1,6 @@
 # Owa-Notifier
-[![Build Status](https://travis-ci.org/matgou/owa-notifier.svg?branch=master)](https://travis-ci.org/matgou/owa-notifier)                               
-[![codecov.io](https://codecov.io/github/matgou/owa-notifier/coverage.svg?branch=master)](https://codecov.io/github/matgou/owa-notifier?branch=master)  
+[![Build Status](https://travis-ci.org/OwaNotifier/owa-notifier.svg?branch=master)](https://travis-ci.org/OwaNotifier/owa-notifier)                               
+[![codecov.io](https://codecov.io/github/OwaNotifier/owa-notifier/coverage.svg?branch=master)](https://codecov.io/github/OwaNotifier/owa-notifier?branch=master)  
 
 This application display notification when number of unread mail change in a Office365 inbox. It use oauth2 to get graph.microsoft.com API credential.
 
