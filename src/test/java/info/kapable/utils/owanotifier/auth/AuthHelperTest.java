@@ -58,7 +58,7 @@ public class AuthHelperTest extends TestCase {
 		}
 		assertTrue(url.contains("state=" + state));
 		assertTrue(url.contains("nonce=" + nonce));
-		assertTrue(url.contains(":8080"));
+		assertTrue(url.contains(":80"));
 	}
 	
 	@Test
